@@ -7,15 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E31939342D14D82400B0793C /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31939332D14D82400B0793C /* LoginView.swift */; };
+		E31A09972D16C57E00B8CB32 /* HTTPTypes in Frameworks */ = {isa = PBXBuildFile; productRef = E31A09962D16C57E00B8CB32 /* HTTPTypes */; };
+		E31A09992D16C57E00B8CB32 /* HTTPTypesFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = E31A09982D16C57E00B8CB32 /* HTTPTypesFoundation */; };
+		E31A099B2D16D13B00B8CB32 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */; };
+		E332D5582D15E3F500BE4C5E /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E332D5572D15E3F500BE4C5E /* UserView.swift */; };
 		E3B5ECBC2D11CECF00428BEF /* EmojiUtilsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */; };
 		E3B5ECBE2D11CECF00428BEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECBD2D11CECF00428BEF /* ContentView.swift */; };
 		E3B5ECC22D11CED100428BEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3B5ECC12D11CED100428BEF /* Assets.xcassets */; };
 		E3B5ECC52D11CED100428BEF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3B5ECC42D11CED100428BEF /* Preview Assets.xcassets */; };
 		E3B5ECCC2D11CF6100428BEF /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECCB2D11CF6100428BEF /* Hash.swift */; };
 		E3B5ECCE2D11CF7F00428BEF /* Verify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECCD2D11CF7F00428BEF /* Verify.swift */; };
+		E3F304852D160B4200B620A8 /* rust-api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F304842D160B4200B620A8 /* rust-api.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E31939332D14D82400B0793C /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		E332D5572D15E3F500BE4C5E /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		E332D5592D15E6C900BE4C5E /* EmojiUtils.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EmojiUtils.entitlements; sourceTree = "<group>"; };
 		E3B5ECB82D11CECF00428BEF /* EmojiUtils.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmojiUtils.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiUtilsApp.swift; sourceTree = "<group>"; };
 		E3B5ECBD2D11CECF00428BEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -23,6 +33,7 @@
 		E3B5ECC42D11CED100428BEF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E3B5ECCB2D11CF6100428BEF /* Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hash.swift; sourceTree = "<group>"; };
 		E3B5ECCD2D11CF7F00428BEF /* Verify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Verify.swift; sourceTree = "<group>"; };
+		E3F304842D160B4200B620A8 /* rust-api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "rust-api.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,17 +41,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E31A09972D16C57E00B8CB32 /* HTTPTypes in Frameworks */,
+				E31A09992D16C57E00B8CB32 /* HTTPTypesFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E31A09942D16C54200B8CB32 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E3B5ECAF2D11CECE00428BEF = {
 			isa = PBXGroup;
 			children = (
 				E3B5ECBA2D11CECF00428BEF /* EmojiUtils */,
 				E3B5ECB92D11CECF00428BEF /* Products */,
+				E31A09942D16C54200B8CB32 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -55,12 +76,17 @@
 		E3B5ECBA2D11CECF00428BEF /* EmojiUtils */ = {
 			isa = PBXGroup;
 			children = (
+				E332D5592D15E6C900BE4C5E /* EmojiUtils.entitlements */,
 				E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */,
 				E3B5ECBD2D11CECF00428BEF /* ContentView.swift */,
 				E3B5ECC12D11CED100428BEF /* Assets.xcassets */,
 				E3B5ECC32D11CED100428BEF /* Preview Content */,
 				E3B5ECCB2D11CF6100428BEF /* Hash.swift */,
 				E3B5ECCD2D11CF7F00428BEF /* Verify.swift */,
+				E31939332D14D82400B0793C /* LoginView.swift */,
+				E332D5572D15E3F500BE4C5E /* UserView.swift */,
+				E3F304842D160B4200B620A8 /* rust-api.swift */,
+				E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */,
 			);
 			path = EmojiUtils;
 			sourceTree = "<group>";
@@ -89,6 +115,10 @@
 			dependencies = (
 			);
 			name = EmojiUtils;
+			packageProductDependencies = (
+				E31A09962D16C57E00B8CB32 /* HTTPTypes */,
+				E31A09982D16C57E00B8CB32 /* HTTPTypesFoundation */,
+			);
 			productName = EmojiUtils;
 			productReference = E3B5ECB82D11CECF00428BEF /* EmojiUtils.app */;
 			productType = "com.apple.product-type.application";
@@ -117,6 +147,9 @@
 				Base,
 			);
 			mainGroup = E3B5ECAF2D11CECE00428BEF;
+			packageReferences = (
+				E31A09952D16C57E00B8CB32 /* XCRemoteSwiftPackageReference "swift-http-types" */,
+			);
 			productRefGroup = E3B5ECB92D11CECF00428BEF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -144,9 +177,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3B5ECCE2D11CF7F00428BEF /* Verify.swift in Sources */,
+				E3F304852D160B4200B620A8 /* rust-api.swift in Sources */,
 				E3B5ECBE2D11CECF00428BEF /* ContentView.swift in Sources */,
+				E31A099B2D16D13B00B8CB32 /* KeychainHelper.swift in Sources */,
 				E3B5ECCC2D11CF6100428BEF /* Hash.swift in Sources */,
+				E31939342D14D82400B0793C /* LoginView.swift in Sources */,
 				E3B5ECBC2D11CECF00428BEF /* EmojiUtilsApp.swift in Sources */,
+				E332D5582D15E3F500BE4C5E /* UserView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,6 +314,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EmojiUtils/EmojiUtils.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"EmojiUtils/Preview Content\"";
@@ -309,6 +347,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = EmojiUtils/EmojiUtils.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"EmojiUtils/Preview Content\"";
@@ -358,6 +397,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E31A09952D16C57E00B8CB32 /* XCRemoteSwiftPackageReference "swift-http-types" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-http-types.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E31A09962D16C57E00B8CB32 /* HTTPTypes */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E31A09952D16C57E00B8CB32 /* XCRemoteSwiftPackageReference "swift-http-types" */;
+			productName = HTTPTypes;
+		};
+		E31A09982D16C57E00B8CB32 /* HTTPTypesFoundation */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E31A09952D16C57E00B8CB32 /* XCRemoteSwiftPackageReference "swift-http-types" */;
+			productName = HTTPTypesFoundation;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E3B5ECB02D11CECE00428BEF /* Project object */;
 }

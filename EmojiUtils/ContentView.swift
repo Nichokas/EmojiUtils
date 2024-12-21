@@ -206,17 +206,25 @@ struct ContentView: View {
                     Spacer()
                     
                     // Button to change to the verification view
-                    NavigationLink(destination: VerifyView()) {
-                        HStack {
-                            Image(systemName: "checkmark.shield")
-                            Text("Switch to Verify")
+                    HStack{
+                        NavigationLink(destination: VerifyView()) {
+                            HStack {
+                                Image(systemName: "checkmark.shield")
+                                Text("Switch to verify")
+                            }.foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12).fill(cardBackgroundColor))
                         }
-                        .foregroundColor(.blue)
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(cardBackgroundColor)
-                        )
+                        NavigationLink(destination: LoginView()) {
+                            HStack {
+                                Image(systemName: "person.badge.key")
+                                Text("Switch to identity")
+                            }.foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12).fill(cardBackgroundColor))
+                        }
                     }
                     .padding(.bottom)
                 }
