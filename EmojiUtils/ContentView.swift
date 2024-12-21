@@ -207,11 +207,18 @@ struct ContentView: View {
                     
                     // Button to change to the verification view
                     HStack{
-                        NavigationLink(destination: VerifyView()) {
+                        NavigationLink(destination: {
+                            if let pubKey = KeychainHelper.standard.read(forKey: "public_key"),
+                               let privKey = KeychainHelper.standard.read(forKey: "private_key") {
+                                UserView()
+                            } else {
+                                LoginView()
+                            }
+                        }) {
                             HStack {
-                                Image(systemName: "checkmark.shield")
-                                Text("Switch to verify")
-                            }.foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                                Image(systemName: "person.badge.key")
+                                Text("Switch to identity")
+                            }.foregroundColor(.blue)
                                 .padding()
                                 .background(
                                     RoundedRectangle(cornerRadius: 12).fill(cardBackgroundColor))
@@ -220,7 +227,7 @@ struct ContentView: View {
                             HStack {
                                 Image(systemName: "person.badge.key")
                                 Text("Switch to identity")
-                            }.foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                            }.foregroundColor(.blue)
                                 .padding()
                                 .background(
                                     RoundedRectangle(cornerRadius: 12).fill(cardBackgroundColor))
@@ -309,3 +316,4 @@ struct ContentView_Previews: PreviewProvider {
         }
     }
 }
+
