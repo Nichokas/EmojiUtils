@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E30056392D178D34001E523B /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30056382D178D34001E523B /* AuthManager.swift */; };
 		E300563D2D178E38001E523B /* IdentityCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E300563C2D178E38001E523B /* IdentityCheckView.swift */; };
 		E31939342D14D82400B0793C /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31939332D14D82400B0793C /* LoginView.swift */; };
-		E31A09972D16C57E00B8CB32 /* HTTPTypes in Frameworks */ = {isa = PBXBuildFile; productRef = E31A09962D16C57E00B8CB32 /* HTTPTypes */; };
-		E31A09992D16C57E00B8CB32 /* HTTPTypesFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = E31A09982D16C57E00B8CB32 /* HTTPTypesFoundation */; };
 		E31A099B2D16D13B00B8CB32 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */; };
 		E332D5582D15E3F500BE4C5E /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E332D5572D15E3F500BE4C5E /* UserView.swift */; };
+		E347B89A2D180A4A00017227 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E347B8992D180A4A00017227 /* AuthManager.swift */; };
 		E3B5ECBC2D11CECF00428BEF /* EmojiUtilsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */; };
 		E3B5ECBE2D11CECF00428BEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECBD2D11CECF00428BEF /* ContentView.swift */; };
 		E3B5ECC22D11CED100428BEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3B5ECC12D11CED100428BEF /* Assets.xcassets */; };
@@ -21,15 +19,17 @@
 		E3B5ECCC2D11CF6100428BEF /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECCB2D11CF6100428BEF /* Hash.swift */; };
 		E3B5ECCE2D11CF7F00428BEF /* Verify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECCD2D11CF7F00428BEF /* Verify.swift */; };
 		E3F304852D160B4200B620A8 /* rust-api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F304842D160B4200B620A8 /* rust-api.swift */; };
+		E3F9D3F42D1809790091F4BE /* HTTPTypes in Frameworks */ = {isa = PBXBuildFile; productRef = E3F9D3F32D1809790091F4BE /* HTTPTypes */; };
+		E3F9D3F62D1809790091F4BE /* HTTPTypesFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = E3F9D3F52D1809790091F4BE /* HTTPTypesFoundation */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E30056382D178D34001E523B /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthManager.swift; path = ../../../AuthManager.swift; sourceTree = "<group>"; };
 		E300563C2D178E38001E523B /* IdentityCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCheckView.swift; sourceTree = "<group>"; };
 		E31939332D14D82400B0793C /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		E332D5572D15E3F500BE4C5E /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		E332D5592D15E6C900BE4C5E /* EmojiUtils.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EmojiUtils.entitlements; sourceTree = "<group>"; };
+		E347B8992D180A4A00017227 /* AuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		E3B5ECB82D11CECF00428BEF /* EmojiUtils.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmojiUtils.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiUtilsApp.swift; sourceTree = "<group>"; };
 		E3B5ECBD2D11CECF00428BEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,8 +45,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E31A09972D16C57E00B8CB32 /* HTTPTypes in Frameworks */,
-				E31A09992D16C57E00B8CB32 /* HTTPTypesFoundation in Frameworks */,
+				E3F9D3F42D1809790091F4BE /* HTTPTypes in Frameworks */,
+				E3F9D3F62D1809790091F4BE /* HTTPTypesFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,8 +91,8 @@
 				E332D5572D15E3F500BE4C5E /* UserView.swift */,
 				E3F304842D160B4200B620A8 /* rust-api.swift */,
 				E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */,
-				E30056382D178D34001E523B /* AuthManager.swift */,
 				E300563C2D178E38001E523B /* IdentityCheckView.swift */,
+				E347B8992D180A4A00017227 /* AuthManager.swift */,
 			);
 			path = EmojiUtils;
 			sourceTree = "<group>";
@@ -122,8 +122,8 @@
 			);
 			name = EmojiUtils;
 			packageProductDependencies = (
-				E31A09962D16C57E00B8CB32 /* HTTPTypes */,
-				E31A09982D16C57E00B8CB32 /* HTTPTypesFoundation */,
+				E3F9D3F32D1809790091F4BE /* HTTPTypes */,
+				E3F9D3F52D1809790091F4BE /* HTTPTypesFoundation */,
 			);
 			productName = EmojiUtils;
 			productReference = E3B5ECB82D11CECF00428BEF /* EmojiUtils.app */;
@@ -183,7 +183,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3B5ECCE2D11CF7F00428BEF /* Verify.swift in Sources */,
-				E30056392D178D34001E523B /* AuthManager.swift in Sources */,
 				E3F304852D160B4200B620A8 /* rust-api.swift in Sources */,
 				E3B5ECBE2D11CECF00428BEF /* ContentView.swift in Sources */,
 				E31A099B2D16D13B00B8CB32 /* KeychainHelper.swift in Sources */,
@@ -192,6 +191,7 @@
 				E31939342D14D82400B0793C /* LoginView.swift in Sources */,
 				E3B5ECBC2D11CECF00428BEF /* EmojiUtilsApp.swift in Sources */,
 				E332D5582D15E3F500BE4C5E /* UserView.swift in Sources */,
+				E347B89A2D180A4A00017227 /* AuthManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,12 +418,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E31A09962D16C57E00B8CB32 /* HTTPTypes */ = {
+		E3F9D3F32D1809790091F4BE /* HTTPTypes */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E31A09952D16C57E00B8CB32 /* XCRemoteSwiftPackageReference "swift-http-types" */;
 			productName = HTTPTypes;
 		};
-		E31A09982D16C57E00B8CB32 /* HTTPTypesFoundation */ = {
+		E3F9D3F52D1809790091F4BE /* HTTPTypesFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E31A09952D16C57E00B8CB32 /* XCRemoteSwiftPackageReference "swift-http-types" */;
 			productName = HTTPTypesFoundation;
