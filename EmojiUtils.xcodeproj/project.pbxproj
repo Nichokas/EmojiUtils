@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E30056392D178D34001E523B /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E30056382D178D34001E523B /* AuthManager.swift */; };
 		E300563D2D178E38001E523B /* IdentityCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E300563C2D178E38001E523B /* IdentityCheckView.swift */; };
 		E31939342D14D82400B0793C /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31939332D14D82400B0793C /* LoginView.swift */; };
 		E31A09972D16C57E00B8CB32 /* HTTPTypes in Frameworks */ = {isa = PBXBuildFile; productRef = E31A09962D16C57E00B8CB32 /* HTTPTypes */; };
@@ -24,7 +23,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E30056382D178D34001E523B /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthManager.swift; path = ../../../AuthManager.swift; sourceTree = "<group>"; };
 		E300563C2D178E38001E523B /* IdentityCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityCheckView.swift; sourceTree = "<group>"; };
 		E31939332D14D82400B0793C /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
@@ -91,7 +89,6 @@
 				E332D5572D15E3F500BE4C5E /* UserView.swift */,
 				E3F304842D160B4200B620A8 /* rust-api.swift */,
 				E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */,
-				E30056382D178D34001E523B /* AuthManager.swift */,
 				E300563C2D178E38001E523B /* IdentityCheckView.swift */,
 			);
 			path = EmojiUtils;
@@ -183,7 +180,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3B5ECCE2D11CF7F00428BEF /* Verify.swift in Sources */,
-				E30056392D178D34001E523B /* AuthManager.swift in Sources */,
 				E3F304852D160B4200B620A8 /* rust-api.swift in Sources */,
 				E3B5ECBE2D11CECF00428BEF /* ContentView.swift in Sources */,
 				E31A099B2D16D13B00B8CB32 /* KeychainHelper.swift in Sources */,
