@@ -207,30 +207,26 @@ struct ContentView: View {
                     
                     // Button to change to the verification view
                     HStack{
-                        NavigationLink(destination: {
-                            if let pubKey = KeychainHelper.standard.read(forKey: "public_key"),
-                               let privKey = KeychainHelper.standard.read(forKey: "private_key") {
-                                UserView()
-                            } else {
-                                LoginView()
-                            }
-                        }) {
+                        NavigationLink(destination: VerifyView()) {
                             HStack {
-                                Image(systemName: "person.badge.key")
-                                Text("Switch to identity")
-                            }.foregroundColor(.blue)
+                                Image(systemName: "checkmark.shield")
+                                Text("Switch to verify")
+                            }.foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                                 .padding()
                                 .background(
                                     RoundedRectangle(cornerRadius: 12).fill(cardBackgroundColor))
                         }
-                        NavigationLink(destination: LoginView()) {
+                        NavigationLink(destination: IdentityCheckView()) {
                             HStack {
                                 Image(systemName: "person.badge.key")
                                 Text("Switch to identity")
-                            }.foregroundColor(.blue)
-                                .padding()
-                                .background(
-                                    RoundedRectangle(cornerRadius: 12).fill(cardBackgroundColor))
+                            }
+                            .foregroundColor(.blue)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(cardBackgroundColor)
+                            )
                         }
                     }
                     .padding(.bottom)
