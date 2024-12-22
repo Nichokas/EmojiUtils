@@ -12,6 +12,8 @@
 		E31A099B2D16D13B00B8CB32 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */; };
 		E332D5582D15E3F500BE4C5E /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E332D5572D15E3F500BE4C5E /* UserView.swift */; };
 		E347B89A2D180A4A00017227 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E347B8992D180A4A00017227 /* AuthManager.swift */; };
+		E347B8A12D182E0E00017227 /* HTTPTypes in Frameworks */ = {isa = PBXBuildFile; productRef = E347B8A02D182E0E00017227 /* HTTPTypes */; };
+		E347B8A32D182E0E00017227 /* HTTPTypesFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = E347B8A22D182E0E00017227 /* HTTPTypesFoundation */; };
 		E3B5ECBC2D11CECF00428BEF /* EmojiUtilsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */; };
 		E3B5ECBE2D11CECF00428BEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECBD2D11CECF00428BEF /* ContentView.swift */; };
 		E3B5ECC22D11CED100428BEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3B5ECC12D11CED100428BEF /* Assets.xcassets */; };
@@ -19,8 +21,6 @@
 		E3B5ECCC2D11CF6100428BEF /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECCB2D11CF6100428BEF /* Hash.swift */; };
 		E3B5ECCE2D11CF7F00428BEF /* Verify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECCD2D11CF7F00428BEF /* Verify.swift */; };
 		E3F304852D160B4200B620A8 /* rust-api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F304842D160B4200B620A8 /* rust-api.swift */; };
-		E3F9D3F42D1809790091F4BE /* HTTPTypes in Frameworks */ = {isa = PBXBuildFile; productRef = E3F9D3F32D1809790091F4BE /* HTTPTypes */; };
-		E3F9D3F62D1809790091F4BE /* HTTPTypesFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = E3F9D3F52D1809790091F4BE /* HTTPTypesFoundation */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,8 +46,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E3F9D3F42D1809790091F4BE /* HTTPTypes in Frameworks */,
-				E3F9D3F62D1809790091F4BE /* HTTPTypesFoundation in Frameworks */,
+				E347B8A12D182E0E00017227 /* HTTPTypes in Frameworks */,
+				E347B8A32D182E0E00017227 /* HTTPTypesFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,8 +124,8 @@
 			);
 			name = EmojiUtils;
 			packageProductDependencies = (
-				E3F9D3F32D1809790091F4BE /* HTTPTypes */,
-				E3F9D3F52D1809790091F4BE /* HTTPTypesFoundation */,
+				E347B8A02D182E0E00017227 /* HTTPTypes */,
+				E347B8A22D182E0E00017227 /* HTTPTypesFoundation */,
 			);
 			productName = EmojiUtils;
 			productReference = E3B5ECB82D11CECF00428BEF /* EmojiUtils.app */;
@@ -422,12 +422,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E3F9D3F32D1809790091F4BE /* HTTPTypes */ = {
+		E347B8A02D182E0E00017227 /* HTTPTypes */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E31A09952D16C57E00B8CB32 /* XCRemoteSwiftPackageReference "swift-http-types" */;
 			productName = HTTPTypes;
 		};
-		E3F9D3F52D1809790091F4BE /* HTTPTypesFoundation */ = {
+		E347B8A22D182E0E00017227 /* HTTPTypesFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E31A09952D16C57E00B8CB32 /* XCRemoteSwiftPackageReference "swift-http-types" */;
 			productName = HTTPTypesFoundation;
