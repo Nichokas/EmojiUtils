@@ -8,7 +8,7 @@
 import Foundation
 
 class AuthManager {
-    // Verifica si existen claves en el Keychain
+    // Verify if there are any key on the keychain
     static func userIsLoggedIn() -> Bool {
         guard
             let _ = KeychainHelper.standard.read(forKey: "public_key"),

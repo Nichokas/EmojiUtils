@@ -205,7 +205,6 @@ struct ContentView: View {
                     
                     Spacer()
                     
-                    // Button to change to the verification view
                     HStack{
                         NavigationLink(destination: VerifyView()) {
                             HStack {

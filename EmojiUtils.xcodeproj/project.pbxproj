@@ -30,6 +30,7 @@
 		E332D5572D15E3F500BE4C5E /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		E332D5592D15E6C900BE4C5E /* EmojiUtils.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EmojiUtils.entitlements; sourceTree = "<group>"; };
 		E347B8992D180A4A00017227 /* AuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		E347B89F2D1829BC00017227 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		E3B5ECB82D11CECF00428BEF /* EmojiUtils.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmojiUtils.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiUtilsApp.swift; sourceTree = "<group>"; };
 		E3B5ECBD2D11CECF00428BEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -80,6 +81,7 @@
 		E3B5ECBA2D11CECF00428BEF /* EmojiUtils */ = {
 			isa = PBXGroup;
 			children = (
+				E347B89F2D1829BC00017227 /* Info.plist */,
 				E332D5592D15E6C900BE4C5E /* EmojiUtils.entitlements */,
 				E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */,
 				E3B5ECBD2D11CECF00428BEF /* ContentView.swift */,
@@ -329,6 +331,7 @@
 				DEVELOPMENT_TEAM = P6PV2R9443;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EmojiUtils/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -362,6 +365,7 @@
 				DEVELOPMENT_TEAM = P6PV2R9443;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = EmojiUtils/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -12,11 +12,11 @@ class KeychainHelper {
     static let standard = KeychainHelper()
     private init() {}
 
-    // Guardar datos en el llavero
+    // Save on keychain
     func save(_ data: String, forKey key: String) {
         guard let data = data.data(using: .utf8) else { return }
 
-        // Eliminar cualquier dato existente con la misma clave
+        // Delete any existent keys for that key
         delete(forKey: key)
 
         // Crear la consulta para agregar el nuevo dato
