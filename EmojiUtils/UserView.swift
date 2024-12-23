@@ -4,6 +4,7 @@
 //
 //  Created by nichokas on 20/12/24.
 //
+
 import SwiftUI
 
 struct UserView: View {
@@ -138,7 +139,6 @@ struct UserView: View {
         verifyIdentity(publicKey: publicKey, emojiSequence: emojiSequence) { success in
             DispatchQueue.main.async {
                 self.isVerifying = false
-                // Handle verification result
             }
         }
     }
@@ -150,7 +150,6 @@ struct UserView: View {
     }
 }
 
-// Additional view for updating user information
 struct UpdateInfoView: View {
     @Binding var name: String
     @Binding var email: String
