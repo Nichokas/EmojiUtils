@@ -4,36 +4,85 @@
 //
 //  Created by nichokas on 20/12/24.
 //
-
 import SwiftUI
 
 struct UserView: View {
     @State private var publicKey: String = ""
     @State private var privateKey: String = ""
+    @State private var userInfo: UserInfo? = nil
+    @State private var showingUpdateSheet = false
+    @State private var showingIdentityProof = false
+    @State private var emojiSequence: String = ""
+    @State private var isVerifying = false
     @Environment(\.presentationMode) var presentationMode
     
+    // New state variables for updating user info
+    @State private var newEmail: String = ""
+    @State private var newPhoneNumber: String = ""
+    
     var body: some View {
-        VStack {
-            Text("Welcome!")
-                .font(.title)
-            
-            // Display the public key (you might want to mask it partially)
-            Text("Public Key: \(publicKey)")
-                .padding()
-            
-            // Add a logout button
-            Button("Logout") {
-                logout()
+        ScrollView {
+            VStack(spacing: 20) {
+                Text("Welcome!")
+                    .font(.title)
+                
+                Text("Public Key: \(publicKey)")
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+                    .padding()
+                
+                if let info = userInfo {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("User Information:")
+                            .font(.headline)
+                        Text("Name: \(info.name ?? "N/A")")
+                        Text("Email: \(info.email ?? "N/A")")
+                        Text("Phone: \(info.phone_number ?? "N/A")")
+                        Text("GPG: \(info.gpg_fingerprint ?? "N/A")")
+                    }
+                    .padding()
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(10)
+                }
+                
+                Button("Update Info") {
+                    showingUpdateSheet = true
+                }
+                .buttonStyle(.bordered)
+                
+                Button("Verify Identity") {
+                    verifyIdentityProcess()
+                }
+                .buttonStyle(.bordered)
+                
+                Button("Logout") {
+                    logout()
+                }
+                .buttonStyle(.bordered)
+                .foregroundColor(.red)
             }
             .padding()
         }
         .onAppear {
             loadKeys()
+            fetchUserInfo()
+        }
+        .sheet(isPresented: $showingUpdateSheet) {
+            UpdateInfoView(email: $newEmail, phoneNumber: $newPhoneNumber) {
+                updateUserInformation()
+            }
+        }
+        .alert("Identity Verification", isPresented: $showingIdentityProof) {
+            Button("Verify") {
+                verifyIdentityConfirmation()
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Your emoji sequence is: \(emojiSequence)\nPlease verify this sequence.")
         }
     }
     
     private func loadKeys() {
-        // Load keys from Keychain
         if let pubKey = KeychainHelper.standard.read(forKey: "public_key"),
            let privKey = KeychainHelper.standard.read(forKey: "private_key") {
             publicKey = pubKey
@@ -41,22 +90,87 @@ struct UserView: View {
         }
     }
     
-    private func logout() {
-        // Clear keys from Keychain
-        KeychainHelper.standard.delete(forKey: "public_key")
-        KeychainHelper.standard.delete(forKey: "private_key")
-        
-        // Dismiss the view and go back to login
-        presentationMode.wrappedValue.dismiss()
+    private func fetchUserInfo() {
+        getUserInfo(publicKey: publicKey) { info in
+            DispatchQueue.main.async {
+                self.userInfo = info
+                if let email = info?.email {
+                    self.newEmail = email
+                }
+                if let phone = info?.phone_number {
+                    self.newPhoneNumber = phone
+                }
+            }
+        }
     }
     
-    // Function to perform operations with the keys
-    private func performOperation() {
-        // Example of how to use the keys for operations
-        // You can access publicKey and privateKey here
-        // For example:
-        login(pub_key: publicKey, priv_key: privateKey) { isValid in
-            // Handle the response
+    private func updateUserInformation() {
+        updateUserInfo(privateKey: privateKey, email: newEmail, phoneNumber: newPhoneNumber) { success in
+            DispatchQueue.main.async {
+                if success {
+                    fetchUserInfo()
+                    showingUpdateSheet = false
+                }
+            }
+        }
+    }
+    
+    private func verifyIdentityProcess() {
+        createIdentityProof(privateKey: privateKey) { sequence in
+            DispatchQueue.main.async {
+                if let sequence = sequence {
+                    self.emojiSequence = sequence
+                    self.showingIdentityProof = true
+                }
+            }
+        }
+    }
+    
+    private func verifyIdentityConfirmation() {
+        verifyIdentity(publicKey: publicKey, emojiSequence: emojiSequence) { success in
+            DispatchQueue.main.async {
+                self.isVerifying = false
+                // Handle verification result
+            }
+        }
+    }
+    
+    private func logout() {
+        KeychainHelper.standard.delete(forKey: "public_key")
+        KeychainHelper.standard.delete(forKey: "private_key")
+        presentationMode.wrappedValue.dismiss()
+    }
+}
+
+// Additional view for updating user information
+struct UpdateInfoView: View {
+    @Binding var email: String
+    @Binding var phoneNumber: String
+    let onUpdate: () -> Void
+    @Environment(\.presentationMode) var presentationMode
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("Update Information")) {
+                    TextField("Email", text: $email)
+                        .textContentType(.emailAddress)
+                        .keyboardType(.emailAddress)
+                    
+                    TextField("Phone Number", text: $phoneNumber)
+                        .textContentType(.telephoneNumber)
+                        .keyboardType(.phonePad)
+                }
+            }
+            .navigationTitle("Update Profile")
+            .navigationBarItems(
+                leading: Button("Cancel") {
+                    presentationMode.wrappedValue.dismiss()
+                },
+                trailing: Button("Save") {
+                    onUpdate()
+                }
+            )
         }
     }
 }
