@@ -106,7 +106,7 @@ func getUserInfo(publicKey: String, completion: @escaping (UserInfo?) -> Void) {
     task.resume()
 }
 
-func updateUserInfo(privateKey: String, email: String?, phoneNumber: String?, completion: @escaping (Bool) -> Void) {
+func updateUserInfo(privateKey: String, email: String?, phoneNumber: String?, name: String?, pgp: String?, completion: @escaping (Bool) -> Void) {
     guard let url = URL(string: "\(base_url)/update_user_info") else {
         completion(false)
         return
@@ -119,7 +119,9 @@ func updateUserInfo(privateKey: String, email: String?, phoneNumber: String?, co
     let updateData = [
         "private_key": privateKey,
         "email": email,
-        "phone_number": phoneNumber
+        "phone_number": phoneNumber,
+        "name": name,
+        "gpg_fingerprint": pgp
     ].compactMapValues { $0 }
     
     do {

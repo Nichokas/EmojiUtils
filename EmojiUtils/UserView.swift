@@ -19,6 +19,8 @@ struct UserView: View {
     // New state variables for updating user info
     @State private var newEmail: String = ""
     @State private var newPhoneNumber: String = ""
+    @State private var newName: String = ""
+    @State private var newPGP: String = ""
     
     var body: some View {
         ScrollView {
@@ -68,7 +70,7 @@ struct UserView: View {
             fetchUserInfo()
         }
         .sheet(isPresented: $showingUpdateSheet) {
-            UpdateInfoView(email: $newEmail, phoneNumber: $newPhoneNumber) {
+            UpdateInfoView(name: $newName, email: $newEmail, phoneNumber: $newPhoneNumber, pgp: $newPGP) {
                 updateUserInformation()
             }
         }
@@ -100,12 +102,18 @@ struct UserView: View {
                 if let phone = info?.phone_number {
                     self.newPhoneNumber = phone
                 }
+                if let name = info?.name {
+                    self.newName = name
+                }
+                if let pgp = info?.gpg_fingerprint {
+                    self.newPGP = pgp
+                }
             }
         }
     }
     
     private func updateUserInformation() {
-        updateUserInfo(privateKey: privateKey, email: newEmail, phoneNumber: newPhoneNumber) { success in
+        updateUserInfo(privateKey: privateKey, email: newEmail, phoneNumber: newPhoneNumber, name: newName, pgp: newPGP) { success in
             DispatchQueue.main.async {
                 if success {
                     fetchUserInfo()
@@ -144,8 +152,11 @@ struct UserView: View {
 
 // Additional view for updating user information
 struct UpdateInfoView: View {
+    @Binding var name: String
     @Binding var email: String
     @Binding var phoneNumber: String
+    @Binding var pgp: String
+    
     let onUpdate: () -> Void
     @Environment(\.presentationMode) var presentationMode
     
@@ -153,6 +164,8 @@ struct UpdateInfoView: View {
         NavigationView {
             Form {
                 Section(header: Text("Update Information")) {
+                    TextField("Name", text: $name)
+                    
                     TextField("Email", text: $email)
                         .textContentType(.emailAddress)
                         .keyboardType(.emailAddress)
@@ -160,6 +173,9 @@ struct UpdateInfoView: View {
                     TextField("Phone Number", text: $phoneNumber)
                         .textContentType(.telephoneNumber)
                         .keyboardType(.phonePad)
+                    
+                    TextField("PGP Fingerprint", text: $pgp)
+                    
                 }
             }
             .navigationTitle("Update Profile")
