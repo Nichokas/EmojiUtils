@@ -7,8 +7,27 @@
 
 import SwiftUI
 
+extension Data {
+    init?(hexString: String) {
+        let len = hexString.count / 2
+        var data = Data(capacity: len)
+        var i = hexString.startIndex
+        for _ in 0..<len {
+            let j = hexString.index(i, offsetBy: 2)
+            let bytes = hexString[i..<j]
+            if var num = UInt8(bytes, radix: 16) {
+                data.append(&num, count: 1)
+            } else {
+                return nil
+            }
+            i = j
+        }
+        self = data
+    }
+}
+
 struct ProofTimerView: View {
-    let hexSequence: String // Cambiamos el tipo para recibir el hex
+    let hexSequence: String
     @State private var timeRemaining: Double = 300 // 5 minutes in seconds
     @State private var timer: Timer?
     @State private var showCopiedFeedback = false
@@ -24,11 +43,13 @@ struct ProofTimerView: View {
     var body: some View {
         VStack {
             ZStack {
+                // Círculo de fondo
                 Circle()
                     .stroke(lineWidth: 20)
                     .opacity(0.3)
                     .foregroundColor(.gray)
                 
+                // Círculo de progreso
                 Circle()
                     .trim(from: 0, to: timeRemaining / 300)
                     .stroke(style: StrokeStyle(lineWidth: 20, lineCap: .round, lineJoin: .round))
@@ -36,21 +57,25 @@ struct ProofTimerView: View {
                     .rotationEffect(.degrees(-90))
                     .animation(.linear, value: timeRemaining)
                 
-                VStack {
+                // Container para los emojis
+                VStack(spacing: 15) {
+                    // Wrap text para los emojis
                     Text(emojiSequence)
-                        .font(.system(size: 40))
+                        .font(.system(size: min(35, 180 / CGFloat(emojiSequence.count))))
+                        .lineLimit(nil)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 20)
+                        .frame(maxWidth: 160)
                         .onLongPressGesture {
                             UIPasteboard.general.string = emojiSequence
-                            // Retroalimentación háptica
                             let generator = UINotificationFeedbackGenerator()
                             generator.notificationOccurred(.success)
                             
-                            // Mostrar feedback visual
                             withAnimation {
                                 showCopiedFeedback = true
                             }
                             
-                            // Ocultar el feedback después de 2 segundos
                             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                 withAnimation {
                                     showCopiedFeedback = false
@@ -64,7 +89,6 @@ struct ProofTimerView: View {
             }
             .frame(width: 200, height: 200)
             .overlay(
-                // Overlay para el feedback de copiado
                 Group {
                     if showCopiedFeedback {
                         Text("¡Copiado!")
@@ -103,25 +127,5 @@ struct ProofTimerView: View {
                 presentationMode.wrappedValue.dismiss()
             }
         }
-    }
-}
-
-// Extensión helper para convertir String hex a Data
-extension Data {
-    init?(hexString: String) {
-        let len = hexString.count / 2
-        var data = Data(capacity: len)
-        var i = hexString.startIndex
-        for _ in 0..<len {
-            let j = hexString.index(i, offsetBy: 2)
-            let bytes = hexString[i..<j]
-            if var num = UInt8(bytes, radix: 16) {
-                data.append(&num, count: 1)
-            } else {
-                return nil
-            }
-            i = j
-        }
-        self = data
     }
 }

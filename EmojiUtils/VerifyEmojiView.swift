@@ -16,107 +16,142 @@ struct VerifyEmojiView: View {
     @State private var showError = false
     
     var body: some View {
-        VStack(spacing: 20) {
-            // Input section
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Introduce la secuencia de emojis")
-                    .font(.headline)
-                
-                TextField("Secuencia de emojis", text: $emojiInput)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .font(.system(size: 24))
-                    .onChange(of: emojiInput) { newValue in
-                        if !isValidEmojiSequence(newValue) {
-                            errorMessage = "Por favor, introduce solo emojis válidos"
-                            showError = true
-                        }
-                    }
-                
-                if !emojiInput.isEmpty {
-                    Text("\(emojiInput.count) emojis introducidos")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                }
-            }
-            .padding(.horizontal)
-            
-            // Verify button
-            Button(action: verifyEmojiSequence) {
-                HStack {
-                    if isLoading {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    }
-                    Text("Verificar")
-                }
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(!emojiInput.isEmpty ? Color.blue : Color.gray)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-            }
-            .disabled(isLoading || emojiInput.isEmpty)
-            .padding(.horizontal)
-            
-            if let response = verificationResponse {
-                // Verification result section
-                VStack(spacing: 15) {
-                    // Status icon and message
-                    HStack {
-                        Image(systemName: response.verified ? "checkmark.circle.fill" : "xmark.circle.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(response.verified ? .green : .red)
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Header Section
+                    VStack(spacing: 15) {
+                        Text("Verify Identity")
+                            .font(.title)
+                            .bold()
                         
-                        Text(response.verified ? "Proof válido" : "Proof inválido")
-                            .font(.headline)
+                        Text("Introduce la secuencia de emojis para verificar la identidad")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
                     }
+                    .padding(.top)
                     
-                    if response.verified {
-                        // Time information
-                        VStack(alignment: .leading, spacing: 10) {
-                            Text("Creado el:")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                            
-                            HStack {
-                                Image(systemName: "clock")
-                                Text("\(formattedTime(response.created_at_utc))")
-                            }
-                            .font(.system(.body, design: .monospaced))
-                        }
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-                        
-                        // User information if available
-                        if let info = userInfo {
-                            VStack(alignment: .leading, spacing: 15) {
-                                Text("Información del usuario")
-                                    .font(.headline)
-                                
-                                UserInfoRow(icon: "person.fill", title: "Nombre", value: info.name ?? "N/A")
-                                UserInfoRow(icon: "envelope.fill", title: "Email", value: info.email ?? "N/A")
-                                UserInfoRow(icon: "phone.fill", title: "Teléfono", value: info.phone_number ?? "N/A")
-                                UserInfoRow(icon: "key.fill", title: "GPG", value: info.gpg_fingerprint ?? "N/A")
-                            }
+                    // Input Section
+                    VStack(spacing: 15) {
+                        TextField("Secuencia de emojis", text: $emojiInput)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .font(.system(size: 24))
+                            .multilineTextAlignment(.center)
                             .padding()
                             .background(Color.gray.opacity(0.1))
                             .cornerRadius(10)
+                            .onChange(of: emojiInput) { newValue in
+                                if !isValidEmojiSequence(newValue) {
+                                    errorMessage = "Por favor, introduce solo emojis válidos"
+                                    showError = true
+                                }
+                            }
+                        
+                        if !emojiInput.isEmpty {
+                            Text("\(emojiInput.count) emojis introducidos")
+                                .font(.caption)
+                                .foregroundColor(.gray)
                         }
                     }
+                    .padding(.horizontal)
+                    
+                    // Verify Button
+                    Button(action: verifyEmojiSequence) {
+                        HStack {
+                            if isLoading {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                    .padding(.trailing, 8)
+                            }
+                            Image(systemName: "checkmark.shield.fill")
+                            Text("Verificar")
+                                .font(.headline)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(!emojiInput.isEmpty ? Color.blue : Color.gray)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                    }
+                    .disabled(isLoading || emojiInput.isEmpty)
+                    .padding(.horizontal)
+                    
+                    // Results Section
+                    if let response = verificationResponse {
+                        VStack(spacing: 20) {
+                            // Status Section
+                            VStack(spacing: 15) {
+                                HStack {
+                                    Image(systemName: response.verified ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                        .font(.system(size: 40))
+                                        .foregroundColor(response.verified ? .green : .red)
+                                    
+                                    Text(response.verified ? "Proof válido" : "Proof inválido")
+                                        .font(.title2)
+                                        .bold()
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(10)
+                            }
+                            .padding(.top, 40)
+                            .padding(.bottom, 20)
+                            
+                            if response.verified {
+                                // Time Information
+                                VStack(spacing: 10) {
+                                    Text("Creado el")
+                                        .font(.headline)
+                                        .foregroundColor(.gray)
+                                    
+                                    HStack {
+                                        Image(systemName: "clock")
+                                            .font(.system(size: 20))
+                                        Text(formattedTime(response.created_at_utc))
+                                            .font(.system(.title3, design: .monospaced))
+                                    }
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(10)
+                                
+                                // User Information
+                                if let info = userInfo {
+                                    VStack(alignment: .leading, spacing: 15) {
+                                        Text("Información del usuario")
+                                            .font(.headline)
+                                            .padding(.bottom, 5)
+                                        
+                                        UserInfoRow(icon: "person.fill", title: "Nombre", value: info.name ?? "N/A")
+                                        UserInfoRow(icon: "envelope.fill", title: "Email", value: info.email ?? "N/A")
+                                        UserInfoRow(icon: "phone.fill", title: "Teléfono", value: info.phone_number ?? "N/A")
+                                        UserInfoRow(icon: "key.fill", title: "GPG", value: info.gpg_fingerprint ?? "N/A")
+                                    }
+                                    .padding()
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(10)
+                                }
+                            }
+                        }
+                        .padding()
+                        .transition(.opacity)
+                    }
+                    
+                    Spacer()
                 }
-                .padding()
-                .transition(.opacity)
             }
-            
-            Spacer()
+            .safeAreaInset(edge: .top) { // Esto asegura que respetamos el área segura superior
+                Color.clear.frame(height: 1)
+            }
+            .alert("Error", isPresented: $showError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(errorMessage ?? "Error desconocido al verificar la secuencia")
+            }
         }
-        .alert("Error", isPresented: $showError) {
-            Button("OK", role: .cancel) { }
-        } message: {
-            Text(errorMessage ?? "Error desconocido al verificar la secuencia")
-        }
-    }
 
     private func verifyEmojiSequence() {
         print("Secuencia de emojis original: \(emojiInput)") // Debug

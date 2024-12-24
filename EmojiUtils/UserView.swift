@@ -7,6 +7,75 @@
 
 import SwiftUI
 
+struct VerifyInfoRow: View {
+    let icon: String
+    let title: String
+    let value: String
+    @State private var showCopiedFeedback = false
+    
+    var body: some View {
+        VStack(spacing: 4) {
+            Text(title)
+                .font(.caption)
+                .foregroundColor(.gray)
+            
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .foregroundColor(.blue)
+                    .frame(width: 20)
+                
+                Text(value)
+                    .font(.body)
+                
+                Spacer()
+                
+                if value != "N/A" {
+                    Button(action: {
+                        UIPasteboard.general.string = value
+                        withAnimation {
+                            showCopiedFeedback = true
+                        }
+                        // Retroalimentación háptica
+                        let generator = UINotificationFeedbackGenerator()
+                        generator.notificationOccurred(.success)
+                        
+                        // Ocultar el feedback después de 2 segundos
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            withAnimation {
+                                showCopiedFeedback = false
+                            }
+                        }
+                    }) {
+                        Image(systemName: "doc.on.doc")
+                            .foregroundColor(.blue)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.gray.opacity(0.1))
+            .cornerRadius(10)
+            .overlay(
+                Group {
+                    if showCopiedFeedback {
+                        Text("¡Copiado!")
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(
+                                Capsule()
+                                    .fill(Color.black.opacity(0.75))
+                            )
+                            .transition(.scale.combined(with: .opacity))
+                            .zIndex(1)
+                    }
+                }
+            )
+        }
+    }
+}
+
+
 struct UserView: View {
     @State private var publicKey: String = ""
     @State private var privateKey: String = ""
@@ -57,24 +126,18 @@ struct UserView: View {
                     // User Information Section
                     if let info = userInfo {
                         VStack(alignment: .leading, spacing: 15) {
-                            HStack {
-                                Image(systemName: "person.circle.fill")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(.blue)
-                                Text("User Information")
-                                    .font(.headline)
-                            }
+                            Text("Información del usuario")
+                                .font(.headline)
+                                .padding(.bottom, 5)
                             
-                            VStack(spacing: 15) {
-                                UserInfoRow(icon: "person.fill", title: "Name", value: info.name ?? "N/A")
-                                UserInfoRow(icon: "envelope.fill", title: "Email", value: info.email ?? "N/A")
-                                UserInfoRow(icon: "phone.fill", title: "Phone", value: info.phone_number ?? "N/A")
-                                UserInfoRow(icon: "key.fill", title: "GPG", value: info.gpg_fingerprint ?? "N/A")
-                            }
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(10)
+                            VerifyInfoRow(icon: "person.fill", title: "Nombre", value: info.name ?? "N/A")
+                            VerifyInfoRow(icon: "envelope.fill", title: "Email", value: info.email ?? "N/A")
+                            VerifyInfoRow(icon: "phone.fill", title: "Teléfono", value: info.phone_number ?? "N/A")
+                            VerifyInfoRow(icon: "key.fill", title: "GPG", value: info.gpg_fingerprint ?? "N/A")
                         }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(10)
                     }
                     
                     // Actions Section
