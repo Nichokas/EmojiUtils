@@ -14,6 +14,9 @@
 		E347B89A2D180A4A00017227 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E347B8992D180A4A00017227 /* AuthManager.swift */; };
 		E347B8A12D182E0E00017227 /* HTTPTypes in Frameworks */ = {isa = PBXBuildFile; productRef = E347B8A02D182E0E00017227 /* HTTPTypes */; };
 		E347B8A32D182E0E00017227 /* HTTPTypesFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = E347B8A22D182E0E00017227 /* HTTPTypesFoundation */; };
+		E37CB5B32D1B197B00F71E49 /* ProofTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37CB5B22D1B197B00F71E49 /* ProofTimerView.swift */; };
+		E37CB5B52D1B19B400F71E49 /* VerifyEmojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37CB5B42D1B19B400F71E49 /* VerifyEmojiView.swift */; };
+		E37CB5B92D1B2F6C00F71E49 /* HashmojiHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37CB5B82D1B2F6C00F71E49 /* HashmojiHelper.swift */; };
 		E3B5ECBC2D11CECF00428BEF /* EmojiUtilsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */; };
 		E3B5ECBE2D11CECF00428BEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECBD2D11CECF00428BEF /* ContentView.swift */; };
 		E3B5ECC22D11CED100428BEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3B5ECC12D11CED100428BEF /* Assets.xcassets */; };
@@ -31,6 +34,9 @@
 		E332D5592D15E6C900BE4C5E /* EmojiUtils.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EmojiUtils.entitlements; sourceTree = "<group>"; };
 		E347B8992D180A4A00017227 /* AuthManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		E347B89F2D1829BC00017227 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		E37CB5B22D1B197B00F71E49 /* ProofTimerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProofTimerView.swift; sourceTree = "<group>"; };
+		E37CB5B42D1B19B400F71E49 /* VerifyEmojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyEmojiView.swift; sourceTree = "<group>"; };
+		E37CB5B82D1B2F6C00F71E49 /* HashmojiHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashmojiHelper.swift; sourceTree = "<group>"; };
 		E3B5ECB82D11CECF00428BEF /* EmojiUtils.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmojiUtils.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiUtilsApp.swift; sourceTree = "<group>"; };
 		E3B5ECBD2D11CECF00428BEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -92,6 +98,9 @@
 				E31939332D14D82400B0793C /* LoginView.swift */,
 				E332D5572D15E3F500BE4C5E /* UserView.swift */,
 				E3F304842D160B4200B620A8 /* rust-api.swift */,
+				E37CB5B82D1B2F6C00F71E49 /* HashmojiHelper.swift */,
+				E37CB5B22D1B197B00F71E49 /* ProofTimerView.swift */,
+				E37CB5B42D1B19B400F71E49 /* VerifyEmojiView.swift */,
 				E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */,
 				E300563C2D178E38001E523B /* IdentityCheckView.swift */,
 				E347B8992D180A4A00017227 /* AuthManager.swift */,
@@ -187,10 +196,13 @@
 				E3B5ECCE2D11CF7F00428BEF /* Verify.swift in Sources */,
 				E3F304852D160B4200B620A8 /* rust-api.swift in Sources */,
 				E3B5ECBE2D11CECF00428BEF /* ContentView.swift in Sources */,
+				E37CB5B32D1B197B00F71E49 /* ProofTimerView.swift in Sources */,
 				E31A099B2D16D13B00B8CB32 /* KeychainHelper.swift in Sources */,
 				E300563D2D178E38001E523B /* IdentityCheckView.swift in Sources */,
 				E3B5ECCC2D11CF6100428BEF /* Hash.swift in Sources */,
+				E37CB5B92D1B2F6C00F71E49 /* HashmojiHelper.swift in Sources */,
 				E31939342D14D82400B0793C /* LoginView.swift in Sources */,
+				E37CB5B52D1B19B400F71E49 /* VerifyEmojiView.swift in Sources */,
 				E3B5ECBC2D11CECF00428BEF /* EmojiUtilsApp.swift in Sources */,
 				E332D5582D15E3F500BE4C5E /* UserView.swift in Sources */,
 				E347B89A2D180A4A00017227 /* AuthManager.swift in Sources */,

@@ -1,10 +1,3 @@
-//
-//  KeychainHelper.swift
-//  EmojiUtils
-//
-//  Created by nichokas on 21/12/24.
-//
-
 import Foundation
 import Security
 
@@ -12,30 +5,30 @@ class KeychainHelper {
     static let standard = KeychainHelper()
     private init() {}
 
-    // Save on keychain
+    // Save to keychain
     func save(_ data: String, forKey key: String) {
         guard let data = data.data(using: .utf8) else { return }
 
-        // Delete any existent keys for that key
+        // Delete any existing keys for that key
         delete(forKey: key)
 
-        // Crear la consulta para agregar el nuevo dato
+        // Create the query to add the new data
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
             kSecValueData as String: data
         ]
 
-        // Agregar el dato al llavero
+        // Add the data to the keychain
         let status = SecItemAdd(query as CFDictionary, nil)
         if status != errSecSuccess {
-            print("Error al guardar el dato en el llavero: \(status)")
+            print("Error saving data to keychain: \(status)")
         }
     }
 
-    // Leer datos del llavero
+    // Read data from the keychain
     func read(forKey key: String) -> String? {
-        // Crear la consulta para buscar el dato
+        // Create the query to search for the data
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
@@ -46,28 +39,28 @@ class KeychainHelper {
         var item: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &item)
 
-        // Verificar si se encontró el dato
+        // Check if the data was found
         guard status == errSecSuccess, let data = item as? Data else {
-            print("Error al leer el dato del llavero: \(status)")
+            print("Error reading data from keychain: \(status)")
             return nil
         }
 
-        // Convertir los datos a una cadena de texto
+        // Convert the data to a string
         return String(data: data, encoding: .utf8)
     }
 
-    // Eliminar datos del llavero
+    // Delete data from the keychain
     func delete(forKey key: String) {
-        // Crear la consulta para identificar el dato a eliminar
+        // Create the query to identify the data to delete
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key
         ]
 
-        // Eliminar el dato del llavero
+        // Delete the data from the keychain
         let status = SecItemDelete(query as CFDictionary)
         if status != errSecSuccess {
-            print("Error al eliminar el dato del llavero: \(status)")
+            print("Error deleting data from keychain: \(status)")
         }
     }
 }
