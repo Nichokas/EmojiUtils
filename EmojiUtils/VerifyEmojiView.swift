@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct VerifyEmojiView: View {
-    @State private var hexInput: String = ""
+    @State private var emojiInput: String = "" // Cambiar hexInput por emojiInput
     @State private var verificationResponse: VerifyIdentityResponse?
     @State private var isLoading = false
     @State private var userInfo: UserInfo?
@@ -19,18 +19,29 @@ struct VerifyEmojiView: View {
         VStack(spacing: 20) {
             // Input section
             VStack(alignment: .leading, spacing: 8) {
-                Text("Introduce la secuencia hexadecimal")
+                Text("Introduce la secuencia de emojis")
                     .font(.headline)
                 
-                TextField("Secuencia hexadecimal", text: $hexInput)
+                TextField("Secuencia de emojis", text: $emojiInput)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .font(.system(size: 20))
-                    .autocapitalization(.none)
+                    .font(.system(size: 24))
+                    .onChange(of: emojiInput) { newValue in
+                        if !isValidEmojiSequence(newValue) {
+                            errorMessage = "Por favor, introduce solo emojis válidos"
+                            showError = true
+                        }
+                    }
+                
+                if !emojiInput.isEmpty {
+                    Text("\(emojiInput.count) emojis introducidos")
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                }
             }
             .padding(.horizontal)
             
             // Verify button
-            Button(action: verifyHexSequence) {
+            Button(action: verifyEmojiSequence) {
                 HStack {
                     if isLoading {
                         ProgressView()
@@ -40,11 +51,11 @@ struct VerifyEmojiView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(isValidHex(hexInput) ? Color.blue : Color.gray)
+                .background(!emojiInput.isEmpty ? Color.blue : Color.gray)
                 .foregroundColor(.white)
                 .cornerRadius(10)
             }
-            .disabled(isLoading || !isValidHex(hexInput))
+            .disabled(isLoading || emojiInput.isEmpty)
             .padding(.horizontal)
             
             if let response = verificationResponse {
@@ -106,31 +117,54 @@ struct VerifyEmojiView: View {
             Text(errorMessage ?? "Error desconocido al verificar la secuencia")
         }
     }
-    
-    private func isValidHex(_ string: String) -> Bool {
-        let hexRegex = "^[0-9A-Fa-f]+$"
-        return string.range(of: hexRegex, options: .regularExpression) != nil
-    }
-    
-    private func verifyHexSequence() {
+
+    private func verifyEmojiSequence() {
+        print("Secuencia de emojis original: \(emojiInput)") // Debug
+        
+        guard let hexSequence = emojiInput.emojisToHex() else {
+            errorMessage = "Secuencia de emojis inválida"
+            showError = true
+            return
+        }
+        
+        print("Secuencia convertida a hex: \(hexSequence)") // Debug
         isLoading = true
-        verifyIdentity(emojiSequence: hexInput) { result in
+        
+        verifyIdentity(emojiSequence: hexSequence) { result in
             DispatchQueue.main.async {
                 isLoading = false
                 
                 switch result {
                 case .success(let response):
-                    self.verificationResponse = response
                     if response.verified {
+                        print("Verificación exitosa con clave pública: \(response.public_key)")
+                        self.verificationResponse = response
                         fetchUserInfo(publicKey: response.public_key)
+                    } else {
+                        self.errorMessage = response.message ?? "Verificación fallida"
+                        self.showError = true
                     }
                 case .failure(let error):
-                    self.errorMessage = error.localizedDescription
+                    print("Error en la verificación: \(error)")
+                    self.errorMessage = "Error al verificar: \(error.localizedDescription)"
                     self.showError = true
                 }
             }
         }
     }
+
+    // Función para validar que solo se introduzcan emojis válidos
+    private func isValidEmoji(_ emoji: String) -> Bool {
+        let emojiList = HashmojiHelper.getEmojiList()
+        return emojiList.contains(emoji)
+    }
+
+    private func isValidEmojiSequence(_ input: String) -> Bool {
+        return input.unicodeScalars.allSatisfy { scalar in
+            isValidEmoji(String(scalar))
+        }
+    }
+    
     
     private func fetchUserInfo(publicKey: String) {
         getUserInfo(publicKey: publicKey) { info in
@@ -140,7 +174,10 @@ struct VerifyEmojiView: View {
         }
     }
     
-    private func formattedTime(_ utcTime: UTCTime) -> String {
+    private func formattedTime(_ utcTime: UTCTime?) -> String {
+        guard let utcTime = utcTime else {
+            return "Tiempo no disponible"
+        }
         return String(format: "%02d:%02d:%02d UTC",
                      utcTime.hour,
                      utcTime.minute,

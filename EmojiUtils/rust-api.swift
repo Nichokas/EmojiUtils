@@ -14,21 +14,36 @@ struct IdentityProofResponse: Codable {
 }
 
 struct VerifyIdentityResponse: Codable {
-    let created_at: String
-    let created_at_utc: UTCTime
+    let created_at: String?
+    let created_at_utc: UTCTime?
     let public_key: String
     let verified: Bool
+    let message: String?
     
-    // Añadir un init por defecto para manejar posibles errores de decodificación
+    enum CodingKeys: String, CodingKey {
+        case created_at
+        case created_at_utc
+        case public_key
+        case verified
+        case message
+    }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.created_at = try container.decode(String.self, forKey: .created_at)
-        self.created_at_utc = try container.decode(UTCTime.self, forKey: .created_at_utc)
-        self.public_key = try container.decode(String.self, forKey: .public_key)
         self.verified = try container.decode(Bool.self, forKey: .verified)
+        self.message = try? container.decode(String.self, forKey: .message)
+        
+        if self.verified {
+            self.created_at = try container.decode(String.self, forKey: .created_at)
+            self.created_at_utc = try container.decode(UTCTime.self, forKey: .created_at_utc)
+            self.public_key = try container.decode(String.self, forKey: .public_key)
+        } else {
+            self.created_at = nil
+            self.created_at_utc = nil
+            self.public_key = ""
+        }
     }
 }
-
 struct UTCTime: Codable {
     let hour: Int
     let minute: Int
@@ -219,13 +234,12 @@ func verifyIdentity(emojiSequence: String, completion: @escaping (Result<VerifyI
     request.httpMethod = "POST"
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     
-    // Enviar directamente la secuencia hexadecimal
+    // Enviar directamente la secuencia de emojis
     let verifyData = ["emoji_sequence": emojiSequence]
     
     do {
         request.httpBody = try JSONSerialization.data(withJSONObject: verifyData)
-        // Debug: Imprimir lo que estamos enviando
-        print("Enviando al servidor:", verifyData)
+        print("Enviando al servidor:", verifyData) // Debug
     } catch {
         completion(.failure(error))
         return
@@ -242,7 +256,13 @@ func verifyIdentity(emojiSequence: String, completion: @escaping (Result<VerifyI
             return
         }
         
+        // Imprimir el código de estado HTTP para debug
+        print("Código de estado HTTP:", httpResponse.statusCode)
+        
         guard (200...299).contains(httpResponse.statusCode) else {
+            if let data = data, let errorStr = String(data: data, encoding: .utf8) {
+                print("Error del servidor:", errorStr)
+            }
             completion(.failure(NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Error del servidor: \(httpResponse.statusCode)"])))
             return
         }
