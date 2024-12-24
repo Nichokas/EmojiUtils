@@ -6,7 +6,16 @@ struct LoginView: View {
     @State private var priv_key: String = ""
     @State private var showError: Bool = false
     @State private var navigateToUserView: Bool = false
+    @State private var showingRegistrationSheet: Bool = false
     @Environment(\.colorScheme) var colorScheme
+    
+    // States for registration form
+    @State private var name: String = ""
+    @State private var email: String = ""
+    @State private var phoneNumber: String = ""
+    @State private var gpgFingerprint: String = ""
+    @State private var registrationError: String = ""
+    @State private var showRegistrationError: Bool = false
     
     private var backgroundColor: LinearGradient {
         switch colorScheme {
@@ -43,6 +52,7 @@ struct LoginView: View {
                     Text("Identity login")
                         .font(.system(size: 36, weight: .bold, design: .rounded))
                         .foregroundColor(colorScheme == .dark ? .white : .primary)
+                    
                     
                     VStack(spacing: 8) {
                         HStack {
@@ -88,10 +98,17 @@ struct LoginView: View {
                         .padding(.horizontal, 20)
                     }
                     
-                    Button(action: loginAPI) {
-                        Label("Import keypair", systemImage: "square.and.arrow.down")
+                    HStack(spacing: 10) {
+                        Button(action: loginAPI) {
+                            Label("Import keypair", systemImage: "square.and.arrow.down")
+                        }
+                        .buttonStyle(.bordered)
+                        
+                        Button(action: { showingRegistrationSheet = true }) {
+                            Label("Create new keypair", systemImage: "plus.circle")
+                        }
+                        .buttonStyle(.bordered)
                     }
-                    .buttonStyle(.bordered)
                     .alert("Invalid keys", isPresented: $showError) {
                         Button("OK", role: .cancel) {}
                     }
@@ -103,6 +120,9 @@ struct LoginView: View {
                     )
                 }
             }
+        }
+        .sheet(isPresented: $showingRegistrationSheet) {
+            RegistrationView(isPresented: $showingRegistrationSheet)
         }
     }
     
@@ -118,6 +138,102 @@ struct LoginView: View {
                     navigateToUserView = true
                 } else {
                     showError = true
+                }
+            }
+        }
+    }
+}
+
+
+struct RegistrationView: View {
+    @Binding var isPresented: Bool
+    @State private var name: String = ""
+    @State private var email: String = ""
+    @State private var phoneNumber: String = ""
+    @State private var gpgFingerprint: String = ""
+    @State private var showError: Bool = false
+    @State private var errorMessage: String = ""
+    @State private var showingSuccessAlert: Bool = false
+    @State private var navigateToUserView: Bool = false
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section(header: Text("Personal Information")) {
+                    TextField("Name", text: $name)
+                    TextField("Email", text: $email)
+                        .keyboardType(.emailAddress)
+                        .autocapitalization(.none)
+                    TextField("Phone Number", text: $phoneNumber)
+                        .keyboardType(.phonePad)
+                    TextField("GPG Fingerprint", text: $gpgFingerprint)
+                        .autocapitalization(.none)
+                }
+                
+                Section {
+                    Button(action: registerUser) {
+                        Text("Create Keypair")
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(.blue)
+                    }
+                }
+            }
+            .navigationTitle("Create New Keypair")
+            .navigationBarItems(leading: Button("Cancel") {
+                isPresented = false
+            })
+            .alert("Error", isPresented: $showError) {
+                Button("OK", role: .cancel) { }
+            } message: {
+                Text(errorMessage)
+            }
+            .alert("Success", isPresented: $showingSuccessAlert) {
+                Button("OK") {
+                    isPresented = false
+                    // Después de cerrar el alert de éxito, navegamos a UserView
+                    navigateToUserView = true
+                }
+            } message: {
+                Text("Your keypair has been created successfully. The keys have been saved to your keychain.")
+            }
+            
+            NavigationLink(destination: UserView(), isActive: $navigateToUserView) {
+                EmptyView()
+            }
+        }
+    }
+    private func registerUser() {
+        register(
+            name: name,
+            email: email,
+            phoneNumber: phoneNumber,
+            gpgFingerprint: gpgFingerprint
+        ) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let response):
+                    // Save the keys to the keychain
+                    KeychainHelper.standard.save(response.public_key, forKey: "public_key")
+                    KeychainHelper.standard.save(response.private_key, forKey: "private_key")
+                    
+                    // Print para debug
+                    print("Keys saved successfully:")
+                    print("Public key: \(response.public_key)")
+                    print("Private key: \(response.private_key)")
+                    
+                    // Verificar que las keys se guardaron correctamente
+                    if let savedPubKey = KeychainHelper.standard.read(forKey: "public_key"),
+                       let savedPrivKey = KeychainHelper.standard.read(forKey: "private_key") {
+                        print("Keys retrieved from keychain:")
+                        print("Public key: \(savedPubKey)")
+                        print("Private key: \(savedPrivKey)")
+                    }
+                    
+                    showingSuccessAlert = true
+                case .failure(let error):
+                    showError = true
+                    errorMessage = error.localizedDescription
+                    print("Registration error: \(error.localizedDescription)")
                 }
             }
         }
