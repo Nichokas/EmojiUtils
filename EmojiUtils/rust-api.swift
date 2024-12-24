@@ -13,6 +13,36 @@ struct IdentityProofResponse: Codable {
     var emoji_sequence: String
 }
 
+struct VerifyIdentityResponse: Codable {
+    let created_at: String
+    let created_at_utc: UTCTime
+    let public_key: String
+    let verified: Bool
+    
+    // Añadir un init por defecto para manejar posibles errores de decodificación
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.created_at = try container.decode(String.self, forKey: .created_at)
+        self.created_at_utc = try container.decode(UTCTime.self, forKey: .created_at_utc)
+        self.public_key = try container.decode(String.self, forKey: .public_key)
+        self.verified = try container.decode(Bool.self, forKey: .verified)
+    }
+}
+
+struct UTCTime: Codable {
+    let hour: Int
+    let minute: Int
+    let second: Int
+    
+    // Añadir init por defecto
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.hour = try container.decode(Int.self, forKey: .hour)
+        self.minute = try container.decode(Int.self, forKey: .minute)
+        self.second = try container.decode(Int.self, forKey: .second)
+    }
+}
+
 let base_url = "https://nichokas.hackclub.app"
 
 func login(pub_key: String, priv_key: String, completion: @escaping (Bool) -> Void) {
@@ -179,9 +209,9 @@ func createIdentityProof(privateKey: String, completion: @escaping (String?) -> 
     task.resume()
 }
 
-func verifyIdentity(publicKey: String, emojiSequence: String, completion: @escaping (Bool) -> Void) {
+func verifyIdentity(emojiSequence: String, completion: @escaping (Result<VerifyIdentityResponse, Error>) -> Void) {
     guard let url = URL(string: "\(base_url)/verify_identity") else {
-        completion(false)
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "URL inválida"])))
         return
     }
     
@@ -189,25 +219,52 @@ func verifyIdentity(publicKey: String, emojiSequence: String, completion: @escap
     request.httpMethod = "POST"
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     
-    let verifyData = [
-        "public_key": publicKey,
-        "emoji_sequence": emojiSequence
-    ]
+    // Enviar directamente la secuencia hexadecimal
+    let verifyData = ["emoji_sequence": emojiSequence]
     
     do {
         request.httpBody = try JSONSerialization.data(withJSONObject: verifyData)
+        // Debug: Imprimir lo que estamos enviando
+        print("Enviando al servidor:", verifyData)
     } catch {
-        completion(false)
+        completion(.failure(error))
         return
     }
     
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
-            completion(false)
+        if let error = error {
+            completion(.failure(error))
             return
         }
-        completion(true)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Respuesta inválida"])))
+            return
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            completion(.failure(NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Error del servidor: \(httpResponse.statusCode)"])))
+            return
+        }
+        
+        guard let data = data else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No hay datos"])))
+            return
+        }
+        
+        do {
+            // Debug: Imprimir la respuesta del servidor
+            if let strData = String(data: data, encoding: .utf8) {
+                print("Respuesta del servidor:", strData)
+            }
+            
+            let response = try JSONDecoder().decode(VerifyIdentityResponse.self, from: data)
+            completion(.success(response))
+        } catch {
+            print("Error decodificando:", error)
+            print("Data recibida:", String(data: data, encoding: .utf8) ?? "No data")
+            completion(.failure(error))
+        }
     }
     task.resume()
 }

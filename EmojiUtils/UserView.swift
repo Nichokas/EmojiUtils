@@ -17,6 +17,9 @@ struct UserView: View {
     @State private var isVerifying = false
     @Environment(\.presentationMode) var presentationMode
     
+    @State private var showingProofTimer = false
+    @State private var showingVerifyView = false
+    
     // New state variables for updating user info
     @State private var newEmail: String = ""
     @State private var newPhoneNumber: String = ""
@@ -53,8 +56,19 @@ struct UserView: View {
                 }
                 .buttonStyle(.bordered)
                 
-                Button("Verify Identity") {
-                    verifyIdentityProcess()
+                Button("Create Proof") {
+                    createIdentityProof(privateKey: privateKey) { sequence in
+                        DispatchQueue.main.async {
+                            if let sequence = sequence {
+                                self.emojiSequence = sequence
+                                self.showingProofTimer = true
+                            }
+                        }
+                    }
+                }
+                .buttonStyle(.bordered)
+                Button("Verify Proof") {
+                    showingVerifyView = true
                 }
                 .buttonStyle(.bordered)
                 
@@ -74,6 +88,12 @@ struct UserView: View {
             UpdateInfoView(name: $newName, email: $newEmail, phoneNumber: $newPhoneNumber, pgp: $newPGP) {
                 updateUserInformation()
             }
+        }
+        .sheet(isPresented: $showingProofTimer) {
+            ProofTimerView(hexSequence: emojiSequence)
+        }
+        .sheet(isPresented: $showingVerifyView) {
+            VerifyEmojiView()
         }
         .alert("Identity Verification", isPresented: $showingIdentityProof) {
             Button("Verify") {
@@ -136,7 +156,7 @@ struct UserView: View {
     }
     
     private func verifyIdentityConfirmation() {
-        verifyIdentity(publicKey: publicKey, emojiSequence: emojiSequence) { success in
+        verifyIdentity(emojiSequence: emojiSequence) { success in
             DispatchQueue.main.async {
                 self.isVerifying = false
             }
