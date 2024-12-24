@@ -234,7 +234,7 @@ func verifyIdentity(emojiSequence: String, completion: @escaping (Result<VerifyI
     let verifyData = ["emoji_sequence": emojiSequence]
     
     do {
-        request.httpBody = try JSONSerialization.data(with: verifyData)
+        request.httpBody = try JSONSerialization.data(withJSONObject: verifyData)
         print("Sending to server:", verifyData)
     } catch {
         completion(.failure(error))
