@@ -1,5 +1,3 @@
-// rust-api.swift
-
 import Foundation
 
 struct UserInfo: Codable {
@@ -49,7 +47,6 @@ struct UTCTime: Codable {
     let minute: Int
     let second: Int
     
-    // Añadir init por defecto
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.hour = try container.decode(Int.self, forKey: .hour)
@@ -74,7 +71,7 @@ func login(pub_key: String, priv_key: String, completion: @escaping (Bool) -> Vo
     let keys = Keys(public_key: pub_key, private_key: priv_key)
     
     guard let url = URL(string: "\(base_url)/check") else {
-        print("URL inválida")
+        print("Invalid URL")
         completion(false)
         return
     }
@@ -87,26 +84,26 @@ func login(pub_key: String, priv_key: String, completion: @escaping (Bool) -> Vo
         let jsonData = try JSONEncoder().encode(keys)
         request.httpBody = jsonData
     } catch {
-        print("Error al codificar las claves: \(error)")
+        print("Error encoding keys: \(error)")
         completion(false)
         return
     }
     
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
-            print("Error en la solicitud: \(error)")
+            print("Request error: \(error)")
             completion(false)
             return
         }
         
         guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-            print("Respuesta no válida")
+            print("Invalid response")
             completion(false)
             return
         }
         
         guard let data = data else {
-            print("Datos no recibidos")
+            print("No data received")
             completion(false)
             return
         }
@@ -115,7 +112,7 @@ func login(pub_key: String, priv_key: String, completion: @escaping (Bool) -> Vo
             let responseData = try JSONDecoder().decode(ResponseData.self, from: data)
             completion(responseData.matches)
         } catch {
-            print("Error al decodificar la respuesta: \(error)")
+            print("Error decoding response: \(error)")
             completion(false)
         }
     }
@@ -226,7 +223,7 @@ func createIdentityProof(privateKey: String, completion: @escaping (String?) -> 
 
 func verifyIdentity(emojiSequence: String, completion: @escaping (Result<VerifyIdentityResponse, Error>) -> Void) {
     guard let url = URL(string: "\(base_url)/verify_identity") else {
-        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "URL inválida"])))
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
         return
     }
     
@@ -234,12 +231,11 @@ func verifyIdentity(emojiSequence: String, completion: @escaping (Result<VerifyI
     request.httpMethod = "POST"
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     
-    // Enviar directamente la secuencia de emojis
     let verifyData = ["emoji_sequence": emojiSequence]
     
     do {
-        request.httpBody = try JSONSerialization.data(withJSONObject: verifyData)
-        print("Enviando al servidor:", verifyData) // Debug
+        request.httpBody = try JSONSerialization.data(with: verifyData)
+        print("Sending to server:", verifyData)
     } catch {
         completion(.failure(error))
         return
@@ -252,37 +248,35 @@ func verifyIdentity(emojiSequence: String, completion: @escaping (Result<VerifyI
         }
         
         guard let httpResponse = response as? HTTPURLResponse else {
-            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Respuesta inválida"])))
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])))
             return
         }
         
-        // Imprimir el código de estado HTTP para debug
-        print("Código de estado HTTP:", httpResponse.statusCode)
+        print("HTTP status code:", httpResponse.statusCode)
         
         guard (200...299).contains(httpResponse.statusCode) else {
             if let data = data, let errorStr = String(data: data, encoding: .utf8) {
-                print("Error del servidor:", errorStr)
+                print("Server error:", errorStr)
             }
-            completion(.failure(NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Error del servidor: \(httpResponse.statusCode)"])))
+            completion(.failure(NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Server error: \(httpResponse.statusCode)"])))
             return
         }
         
         guard let data = data else {
-            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No hay datos"])))
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data"])))
             return
         }
         
         do {
-            // Debug: Imprimir la respuesta del servidor
             if let strData = String(data: data, encoding: .utf8) {
-                print("Respuesta del servidor:", strData)
+                print("Server response:", strData)
             }
             
             let response = try JSONDecoder().decode(VerifyIdentityResponse.self, from: data)
             completion(.success(response))
         } catch {
-            print("Error decodificando:", error)
-            print("Data recibida:", String(data: data, encoding: .utf8) ?? "No data")
+            print("Error decoding:", error)
+            print("Received data:", String(data: data, encoding: .utf8) ?? "No data")
             completion(.failure(error))
         }
     }

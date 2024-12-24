@@ -1,10 +1,3 @@
-//
-//  HashmojiHelper.swift
-//  EmojiUtils
-//
-//  Created by nichokas on 24/12/24.
-//
-
 import Foundation
 
 extension String {
@@ -12,12 +5,12 @@ extension String {
         let emojiList = HashmojiHelper.getEmojiList()
         var hexBytes: [UInt8] = []
         
-        // Dividir la string en caracteres emoji individuales
+        // Split the string into individual emoji characters
         var iterator = self.unicodeScalars.makeIterator()
         while let scalar = iterator.next() {
             let emojiString = String(scalar)
             if let index = emojiList.firstIndex(of: emojiString) {
-                // El índice original se obtuvo usando módulo, necesitamos preservar solo el byte
+                // The original index was obtained using modulo, we need to preserve only the byte
                 let byte = UInt8(index % 256)
                 hexBytes.append(byte)
             } else {
@@ -25,7 +18,7 @@ extension String {
             }
         }
         
-        // Convertir los bytes a string hexadecimal
+        // Convert the bytes to a hexadecimal string
         return hexBytes.map { String(format: "%02X", $0) }.joined()
     }
 }

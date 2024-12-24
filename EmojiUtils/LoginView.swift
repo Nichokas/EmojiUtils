@@ -1,10 +1,3 @@
-//
-//  LoginView.swift
-//  EmojiUtils
-//
-//  Created by nichokas on 19/12/24.
-//
-
 import SwiftUI
 import LocalAuthentication
 
@@ -117,11 +110,11 @@ struct LoginView: View {
         login(pub_key: pub_key, priv_key: priv_key) { isValid in
             DispatchQueue.main.async {
                 if isValid {
-                    // Guardar las claves de manera segura en el Keychain
+                    // Save the keys securely in the Keychain
                     KeychainHelper.standard.save(pub_key, forKey: "public_key")
                     KeychainHelper.standard.save(priv_key, forKey: "private_key")
                     
-                    // Navegar a UserView
+                    // Navigate to UserView
                     navigateToUserView = true
                 } else {
                     showError = true
