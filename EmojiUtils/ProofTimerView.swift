@@ -1,10 +1,3 @@
-//
-//  ProofTimerView.swift
-//  EmojiUtils
-//
-//  Created by nichokas on 24/12/24.
-//
-
 import SwiftUI
 
 extension Data {
@@ -91,7 +84,7 @@ struct ProofTimerView: View {
             .overlay(
                 Group {
                     if showCopiedFeedback {
-                        Text("¡Copiado!")
+                        Text("Copied!")
                             .foregroundColor(.white)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
@@ -105,7 +98,7 @@ struct ProofTimerView: View {
                 }
             )
             
-            Text("Mantén pulsado para copiar")
+            Text("Hold to copy")
                 .font(.caption)
                 .foregroundColor(.gray)
                 .padding(.top)

@@ -1,10 +1,3 @@
-//
-//  UserView.swift
-//  EmojiUtils
-//
-//  Created by nichokas on 20/12/24.
-//
-
 import SwiftUI
 
 struct VerifyInfoRow: View {
@@ -58,7 +51,7 @@ struct VerifyInfoRow: View {
             .overlay(
                 Group {
                     if showCopiedFeedback {
-                        Text("¡Copiado!")
+                        Text("Copied!")
                             .foregroundColor(.white)
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
@@ -117,13 +110,13 @@ struct UserView: View {
                     // User Information Section
                     if let info = userInfo {
                         VStack(alignment: .leading, spacing: 15) {
-                            Text("Información del usuario")
+                            Text("User Information")
                                 .font(.headline)
                                 .padding(.bottom, 5)
                             
-                            VerifyInfoRow(icon: "person.fill", title: "Nombre", value: info.name ?? "N/A")
+                            VerifyInfoRow(icon: "person.fill", title: "Name", value: info.name ?? "N/A")
                             VerifyInfoRow(icon: "envelope.fill", title: "Email", value: info.email ?? "N/A")
-                            VerifyInfoRow(icon: "phone.fill", title: "Teléfono", value: info.phone_number ?? "N/A")
+                            VerifyInfoRow(icon: "phone.fill", title: "Phone", value: info.phone_number ?? "N/A")
                             VerifyInfoRow(icon: "key.fill", title: "GPG", value: info.gpg_fingerprint ?? "N/A")
                         }
                         .padding()
@@ -428,7 +421,7 @@ struct PrivateKeyView: View {
                 .padding(.horizontal)
                 
                 if showCopiedFeedback {
-                    Text("¡Copied!")
+                    Text("Copied!")
                         .foregroundColor(.white)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 8)
