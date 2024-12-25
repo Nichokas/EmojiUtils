@@ -132,18 +132,27 @@ func login(priv_key: String, completion: @escaping (Bool, String?) -> Void) {
 }
 
 func getUserInfo(publicKey: String, completion: @escaping (UserInfo?) -> Void) {
-    guard let encodedKey = publicKey.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-          let url = URL(string: "\(base_url)/user_info/\(encodedKey)") else {
+    guard let url = URL(string: "\(base_url)/user_info") else {
         print("Error: Could not create URL for user info")
         completion(nil)
         return
     }
     
-    print("Fetching user info for public key: \(publicKey)")
-    print("URL: \(url.absoluteString)")
-    
     var request = URLRequest(url: url)
-    request.httpMethod = "GET"
+    request.httpMethod = "POST"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    let requestBody = ["public_key": publicKey]
+    
+    do {
+        request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
+    } catch {
+        print("Error encoding request body: \(error)")
+        completion(nil)
+        return
+    }
+    
+    print("Fetching user info for public key: \(publicKey)")
     
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
@@ -187,7 +196,6 @@ func getUserInfo(publicKey: String, completion: @escaping (UserInfo?) -> Void) {
     }
     task.resume()
 }
-
 func updateUserInfo(privateKey: String, email: String?, phoneNumber: String?, name: String?, pgp: String?, completion: @escaping (Bool) -> Void) {
     guard let url = URL(string: "\(base_url)/update_user_info") else {
         completion(false)
