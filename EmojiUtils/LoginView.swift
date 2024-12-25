@@ -2,7 +2,6 @@ import SwiftUI
 import LocalAuthentication
 
 struct LoginView: View {
-    @State private var pub_key: String = ""
     @State private var priv_key: String = ""
     @State private var showError: Bool = false
     @State private var navigateToUserView: Bool = false
@@ -57,27 +56,6 @@ struct LoginView: View {
                     VStack(spacing: 8) {
                         HStack {
                             ZStack(alignment: .leading) {
-                                TextField("Public key", text: $pub_key)
-                                    .textFieldStyle(PlainTextFieldStyle())
-                            }
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(cardBackgroundColor)
-                                    .shadow(
-                                        color: colorScheme == .dark
-                                            ? Color.white.opacity(0.05)
-                                            : Color.black.opacity(0.1),
-                                        radius: 5,
-                                        x: 0,
-                                        y: 2
-                                    )
-                            )
-                        }
-                        .padding(.horizontal, 20)
-                        
-                        HStack {
-                            ZStack(alignment: .leading) {
                                 SecureField("Private key", text: $priv_key)
                                     .textFieldStyle(PlainTextFieldStyle())
                             }
@@ -127,12 +105,20 @@ struct LoginView: View {
     }
     
     private func loginAPI() {
-        login(pub_key: pub_key, priv_key: priv_key) { isValid in
+        login(priv_key: priv_key) { isValid, publicKey in
             DispatchQueue.main.async {
-                if isValid {
+                if isValid, let publicKey = publicKey {
                     // Save the keys securely in the Keychain
-                    KeychainHelper.standard.save(pub_key, forKey: "public_key")
+                    KeychainHelper.standard.save(publicKey, forKey: "public_key")
                     KeychainHelper.standard.save(priv_key, forKey: "private_key")
+                    
+                    // Para verificar que se guardaron correctamente (opcional, puedes removerlo)
+                    if let savedPublicKey = KeychainHelper.standard.read(forKey: "public_key"),
+                       let savedPrivateKey = KeychainHelper.standard.read(forKey: "private_key") {
+                        print("Keys saved successfully:")
+                        print("Public Key: \(savedPublicKey)")
+                        print("Private Key: \(savedPrivateKey)")
+                    }
                     
                     // Navigate to UserView
                     navigateToUserView = true
@@ -142,6 +128,7 @@ struct LoginView: View {
             }
         }
     }
+
 }
 
 

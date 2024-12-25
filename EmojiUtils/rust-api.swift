@@ -23,6 +23,11 @@ struct RegisterResponse: Codable {
     let private_key: String
 }
 
+struct LoginResponse: Codable {
+    var exists: Bool
+    var public_key: String
+}
+
 struct VerifyIdentityResponse: Codable {
     let created_at: String?
     let created_at_utc: UTCTime?
@@ -69,22 +74,16 @@ struct UTCTime: Codable {
 
 let base_url = "https://nichokas.hackclub.app"
 
-func login(pub_key: String, priv_key: String, completion: @escaping (Bool) -> Void) {
-    struct ResponseData: Codable {
-        var matches: Bool
-        var message: String
-    }
-    
-    struct Keys: Codable {
-        let public_key: String
+func login(priv_key: String, completion: @escaping (Bool, String?) -> Void) {
+    struct LoginRequest: Codable {
         let private_key: String
     }
     
-    let keys = Keys(public_key: pub_key, private_key: priv_key)
+    let loginRequest = LoginRequest(private_key: priv_key)
     
     guard let url = URL(string: "\(base_url)/check") else {
         print("Invalid URL")
-        completion(false)
+        completion(false, nil)
         return
     }
     
@@ -93,44 +92,45 @@ func login(pub_key: String, priv_key: String, completion: @escaping (Bool) -> Vo
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     
     do {
-        let jsonData = try JSONEncoder().encode(keys)
+        let jsonData = try JSONEncoder().encode(loginRequest)
         request.httpBody = jsonData
     } catch {
-        print("Error encoding keys: \(error)")
-        completion(false)
+        print("Error encoding request: \(error)")
+        completion(false, nil)
         return
     }
     
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             print("Request error: \(error)")
-            completion(false)
+            completion(false, nil)
             return
         }
         
         guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
             print("Invalid response")
-            completion(false)
+            completion(false, nil)
             return
         }
         
         guard let data = data else {
             print("No data received")
-            completion(false)
+            completion(false, nil)
             return
         }
         
         do {
-            let responseData = try JSONDecoder().decode(ResponseData.self, from: data)
-            completion(responseData.matches)
+            let responseData = try JSONDecoder().decode(LoginResponse.self, from: data)
+            completion(responseData.exists, responseData.exists ? responseData.public_key : nil)
         } catch {
             print("Error decoding response: \(error)")
-            completion(false)
+            completion(false, nil)
         }
     }
     
     task.resume()
 }
+
 func getUserInfo(publicKey: String, completion: @escaping (UserInfo?) -> Void) {
     guard let encodedKey = publicKey.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
           let url = URL(string: "\(base_url)/user_info/\(encodedKey)") else {
