@@ -181,7 +181,7 @@ struct RegistrationView: View {
                     navigateToUserView = true
                 }
             } message: {
-                Text("Your keypair has been created successfully. The keys have been saved to your keychain.")
+                Text("Your keypair has been created successfully. Please reopen the app")
             }
             
             NavigationLink(destination: UserView(), isActive: $navigateToUserView) {
