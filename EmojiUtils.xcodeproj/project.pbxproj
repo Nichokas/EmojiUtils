@@ -23,6 +23,7 @@
 		E3B5ECC52D11CED100428BEF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E3B5ECC42D11CED100428BEF /* Preview Assets.xcassets */; };
 		E3B5ECCC2D11CF6100428BEF /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECCB2D11CF6100428BEF /* Hash.swift */; };
 		E3B5ECCE2D11CF7F00428BEF /* Verify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECCD2D11CF7F00428BEF /* Verify.swift */; };
+		E3BADB1D2D1C2CBB002D2890 /* BiometricAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BADB1C2D1C2CBB002D2890 /* BiometricAuthHelper.swift */; };
 		E3F304852D160B4200B620A8 /* rust-api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F304842D160B4200B620A8 /* rust-api.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		E3B5ECC42D11CED100428BEF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E3B5ECCB2D11CF6100428BEF /* Hash.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hash.swift; sourceTree = "<group>"; };
 		E3B5ECCD2D11CF7F00428BEF /* Verify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Verify.swift; sourceTree = "<group>"; };
+		E3BADB1C2D1C2CBB002D2890 /* BiometricAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricAuthHelper.swift; sourceTree = "<group>"; };
 		E3F304842D160B4200B620A8 /* rust-api.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "rust-api.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -99,6 +101,7 @@
 				E31939332D14D82400B0793C /* LoginView.swift */,
 				E332D5572D15E3F500BE4C5E /* UserView.swift */,
 				E3F304842D160B4200B620A8 /* rust-api.swift */,
+				E3BADB1C2D1C2CBB002D2890 /* BiometricAuthHelper.swift */,
 				E3259F042D1B42FC0072D362 /* ProofTimerView.swift */,
 				E3259F022D1B42EE0072D362 /* HashmojiHelper.swift */,
 				E31A099A2D16D13B00B8CB32 /* KeychainHelper.swift */,
@@ -205,6 +208,7 @@
 				E3B5ECBC2D11CECF00428BEF /* EmojiUtilsApp.swift in Sources */,
 				E332D5582D15E3F500BE4C5E /* UserView.swift in Sources */,
 				E347B89A2D180A4A00017227 /* AuthManager.swift in Sources */,
+				E3BADB1D2D1C2CBB002D2890 /* BiometricAuthHelper.swift in Sources */,
 				E3259F052D1B42FC0072D362 /* ProofTimerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -344,6 +348,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EmojiUtils/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "The app needs FaceID to ensure the privacy of the private-key";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -379,6 +384,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = EmojiUtils/Info.plist;
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "The app needs FaceID to ensure the privacy of the private-key";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

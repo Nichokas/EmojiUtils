@@ -89,6 +89,9 @@ struct UserView: View {
     @State private var showingProofTimer = false
     @State private var showingVerifyView = false
     
+    @State private var showingPrivateKey = false
+    @State private var showPrivateKeySheet = false
+    
     // New state variables for updating user info
     @State private var newEmail: String = ""
     @State private var newPhoneNumber: String = ""
@@ -207,30 +210,45 @@ struct UserView: View {
                 }
                 .padding()
             }
-        .onAppear {
-            loadKeys()
-            fetchUserInfo()
-        }
-        .sheet(isPresented: $showingUpdateSheet) {
-            UpdateInfoView(name: $newName, email: $newEmail, phoneNumber: $newPhoneNumber, pgp: $newPGP) {
-                updateUserInformation()
+            .navigationBarItems(trailing:
+                                    Button(action: {
+                BiometricAuthHelper.authenticate { success in
+                    if success {
+                        showPrivateKeySheet = true
+                    }
+                }
+            }) {
+                Image(systemName: "lock.circle")
+                    .font(.title2)
+            }
+            )
+            .sheet(isPresented: $showPrivateKeySheet) {
+                PrivateKeyView(privateKey: privateKey)
+            }
+            .onAppear {
+                loadKeys()
+                fetchUserInfo()
+            }
+            .sheet(isPresented: $showingUpdateSheet) {
+                UpdateInfoView(name: $newName, email: $newEmail, phoneNumber: $newPhoneNumber, pgp: $newPGP) {
+                    updateUserInformation()
+                }
+            }
+            .sheet(isPresented: $showingProofTimer) {
+                ProofTimerView(hexSequence: emojiSequence)
+            }
+            .sheet(isPresented: $showingVerifyView) {
+                VerifyEmojiView()
+            }
+            .alert("Identity Verification", isPresented: $showingIdentityProof) {
+                Button("Verify") {
+                    verifyIdentityConfirmation()
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Your emoji sequence is: \(emojiSequence)\nPlease verify this sequence.")
             }
         }
-        .sheet(isPresented: $showingProofTimer) {
-            ProofTimerView(hexSequence: emojiSequence)
-        }
-        .sheet(isPresented: $showingVerifyView) {
-            VerifyEmojiView()
-        }
-        .alert("Identity Verification", isPresented: $showingIdentityProof) {
-            Button("Verify") {
-                verifyIdentityConfirmation()
-            }
-            Button("Cancel", role: .cancel) { }
-        } message: {
-            Text("Your emoji sequence is: \(emojiSequence)\nPlease verify this sequence.")
-        }
-    }
     
     private func loadKeys() {
         if let pubKey = KeychainHelper.standard.read(forKey: "public_key"),
@@ -307,54 +325,54 @@ struct UpdateInfoView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-            NavigationView {
-                VStack(spacing: 20) {
-                    VStack(alignment: .leading, spacing: 15) {
-                        InfoField(icon: "person.fill", title: "Name", text: $name)
-                        InfoField(icon: "envelope.fill", title: "Email", text: $email)
-                            .textContentType(.emailAddress)
-                            .keyboardType(.emailAddress)
-                        InfoField(icon: "phone.fill", title: "Phone", text: $phoneNumber)
-                            .textContentType(.telephoneNumber)
-                            .keyboardType(.phonePad)
-                        InfoField(icon: "key.fill", title: "PGP Fingerprint", text: $pgp)
-                    }
-                    .padding()
-                    
-                    Button(action: {
-                        onUpdate()
-                        presentationMode.wrappedValue.dismiss()
-                    }) {
-                        HStack {
-                            Image(systemName: "checkmark.circle.fill")
-                            Text("Save Changes")
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    }
-                    .padding(.horizontal)
-                    
-                    Spacer()
+        NavigationView {
+            VStack(spacing: 20) {
+                VStack(alignment: .leading, spacing: 15) {
+                    InfoField(icon: "person.fill", title: "Name", text: $name)
+                    InfoField(icon: "envelope.fill", title: "Email", text: $email)
+                        .textContentType(.emailAddress)
+                        .keyboardType(.emailAddress)
+                    InfoField(icon: "phone.fill", title: "Phone", text: $phoneNumber)
+                        .textContentType(.telephoneNumber)
+                        .keyboardType(.phonePad)
+                    InfoField(icon: "key.fill", title: "PGP Fingerprint", text: $pgp)
                 }
-                .navigationTitle("Update Profile")
-                .navigationBarItems(leading: Button("Cancel") {
+                .padding()
+                
+                Button(action: {
+                    onUpdate()
                     presentationMode.wrappedValue.dismiss()
-                })
+                }) {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                        Text("Save Changes")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                }
+                .padding(.horizontal)
+                
+                Spacer()
             }
+            .navigationTitle("Update Profile")
+            .navigationBarItems(leading: Button("Cancel") {
+                presentationMode.wrappedValue.dismiss()
+            })
         }
     }
+}
 
-    // Nuevo componente para campos de información
-    struct InfoField: View {
-        let icon: String
-        let title: String
-        @Binding var text: String
-        
-        var body: some View {
-            VStack(alignment: .leading, spacing: 8) {
+// Nuevo componente para campos de información
+struct InfoField: View {
+    let icon: String
+    let title: String
+    @Binding var text: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
                 Text(title)
                     .font(.caption)
                     .foregroundColor(.gray)
@@ -370,3 +388,76 @@ struct UpdateInfoView: View {
             }
         }
     }
+
+struct PrivateKeyView: View {
+    let privateKey: String
+    @Environment(\.presentationMode) var presentationMode
+    @State private var showCopiedFeedback = false
+    
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                Text("Private Key")
+                    .font(.headline)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    ScrollView {
+                        Text(privateKey)
+                            .font(.system(.body, design: .monospaced))
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                .padding()
+                .background(Color.gray.opacity(0.1))
+                .cornerRadius(10)
+                
+                Button(action: {
+                    UIPasteboard.general.string = privateKey
+                    withAnimation {
+                        showCopiedFeedback = true
+                    }
+                    
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        withAnimation {
+                            showCopiedFeedback = false
+                        }
+                    }
+                }) {
+                    HStack {
+                        Image(systemName: "doc.on.doc")
+                        Text("Copy Private Key")
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                }
+                .padding(.horizontal)
+                
+                if showCopiedFeedback {
+                    Text("¡Copied!")
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(
+                            Capsule()
+                                .fill(Color.black.opacity(0.75))
+                        )
+                        .transition(.scale.combined(with: .opacity))
+                }
+                
+                Spacer()
+            }
+            .padding()
+            .navigationBarItems(trailing: Button("Done") {
+                presentationMode.wrappedValue.dismiss()
+            })
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
