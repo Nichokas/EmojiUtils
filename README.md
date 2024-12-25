@@ -14,7 +14,7 @@ EmojiUtils is a fun and visual application that enhances the way we work with ha
 
 Demo
 
-🎥 Video: Watch the app in action on YouTube.
+🎥 Video: https://cloud-mbhtu450y-hack-club-bot.vercel.app/0copy_e768dcf8-fb8a-4378-84db-2a8ab32cb921.mp4
 
 📱 TestFlight: https://testflight.apple.com/join/xM9GDXS8.
 
