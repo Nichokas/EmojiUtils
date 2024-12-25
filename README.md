@@ -15,6 +15,7 @@ EmojiUtils is a fun and visual application that enhances the way we work with ha
 ## Demo
 
 📱 TestFlight: https://testflight.apple.com/join/xM9GDXS8.
+
 🎥 Video: 
 
 https://github.com/user-attachments/assets/46267093-da7c-46ca-9579-ffd6efe9258c
