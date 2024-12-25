@@ -11,6 +11,23 @@ struct IdentityProofResponse: Codable {
     var emoji_sequence: String
 }
 
+struct RegisterRequest: Codable {
+    let name: String
+    let email: String
+    let phone_number: String
+    let gpg_fingerprint: String
+}
+
+struct RegisterResponse: Codable {
+    let public_key: String
+    let private_key: String
+}
+
+struct LoginResponse: Codable {
+    var exists: Bool
+    var public_key: String
+}
+
 struct VerifyIdentityResponse: Codable {
     let created_at: String?
     let created_at_utc: UTCTime?
@@ -57,22 +74,16 @@ struct UTCTime: Codable {
 
 let base_url = "https://nichokas.hackclub.app"
 
-func login(pub_key: String, priv_key: String, completion: @escaping (Bool) -> Void) {
-    struct ResponseData: Codable {
-        var matches: Bool
-        var message: String
-    }
-    
-    struct Keys: Codable {
-        let public_key: String
+func login(priv_key: String, completion: @escaping (Bool, String?) -> Void) {
+    struct LoginRequest: Codable {
         let private_key: String
     }
     
-    let keys = Keys(public_key: pub_key, private_key: priv_key)
+    let loginRequest = LoginRequest(private_key: priv_key)
     
     guard let url = URL(string: "\(base_url)/check") else {
         print("Invalid URL")
-        completion(false)
+        completion(false, nil)
         return
     }
     
@@ -81,64 +92,93 @@ func login(pub_key: String, priv_key: String, completion: @escaping (Bool) -> Vo
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     
     do {
-        let jsonData = try JSONEncoder().encode(keys)
+        let jsonData = try JSONEncoder().encode(loginRequest)
         request.httpBody = jsonData
     } catch {
-        print("Error encoding keys: \(error)")
-        completion(false)
+        print("Error encoding request: \(error)")
+        completion(false, nil)
         return
     }
     
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             print("Request error: \(error)")
-            completion(false)
+            completion(false, nil)
             return
         }
         
         guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
             print("Invalid response")
-            completion(false)
+            completion(false, nil)
             return
         }
         
         guard let data = data else {
             print("No data received")
-            completion(false)
+            completion(false, nil)
             return
         }
         
         do {
-            let responseData = try JSONDecoder().decode(ResponseData.self, from: data)
-            completion(responseData.matches)
+            let responseData = try JSONDecoder().decode(LoginResponse.self, from: data)
+            completion(responseData.exists, responseData.exists ? responseData.public_key : nil)
         } catch {
             print("Error decoding response: \(error)")
-            completion(false)
+            completion(false, nil)
         }
     }
     
     task.resume()
 }
+
 func getUserInfo(publicKey: String, completion: @escaping (UserInfo?) -> Void) {
     guard let encodedKey = publicKey.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
           let url = URL(string: "\(base_url)/user_info/\(encodedKey)") else {
+        print("Error: Could not create URL for user info")
         completion(nil)
         return
     }
+    
+    print("Fetching user info for public key: \(publicKey)")
+    print("URL: \(url.absoluteString)")
     
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
     
     let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        guard let data = data,
-              let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode) else {
+        if let error = error {
+            print("Network error: \(error.localizedDescription)")
+            completion(nil)
+            return
+        }
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            print("Error: Invalid HTTP response")
+            completion(nil)
+            return
+        }
+        
+        print("HTTP Status Code: \(httpResponse.statusCode)")
+        
+        if let data = data, let responseString = String(data: data, encoding: .utf8) {
+            print("Response data: \(responseString)")
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            print("Error: HTTP status code \(httpResponse.statusCode)")
+            completion(nil)
+            return
+        }
+        
+        guard let data = data else {
+            print("Error: No data received")
             completion(nil)
             return
         }
         
         do {
             let userInfo = try JSONDecoder().decode(UserInfo.self, from: data)
+            print("Successfully decoded user info: \(userInfo)")
             completion(userInfo)
         } catch {
             print("Error decoding user info: \(error)")
@@ -280,5 +320,53 @@ func verifyIdentity(emojiSequence: String, completion: @escaping (Result<VerifyI
             completion(.failure(error))
         }
     }
+    task.resume()
+}
+
+func register(name: String, email: String, phoneNumber: String, gpgFingerprint: String, completion: @escaping (Result<RegisterResponse, Error>) -> Void) {
+    guard let url = URL(string: "\(base_url)/register") else {
+        completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+        return
+    }
+    
+    var request = URLRequest(url: url)
+    request.httpMethod = "POST"
+    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    
+    let registerData = RegisterRequest(
+        name: name,
+        email: email,
+        phone_number: phoneNumber,
+        gpg_fingerprint: gpgFingerprint
+    )
+    
+    do {
+        request.httpBody = try JSONEncoder().encode(registerData)
+    } catch {
+        completion(.failure(error))
+        return
+    }
+    
+    let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        if let error = error {
+            completion(.failure(error))
+            return
+        }
+        
+        guard let data = data,
+              let httpResponse = response as? HTTPURLResponse,
+              (200...299).contains(httpResponse.statusCode) else {
+            completion(.failure(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Server error"])))
+            return
+        }
+        
+        do {
+            let response = try JSONDecoder().decode(RegisterResponse.self, from: data)
+            completion(.success(response))
+        } catch {
+            completion(.failure(error))
+        }
+    }
+    
     task.resume()
 }
