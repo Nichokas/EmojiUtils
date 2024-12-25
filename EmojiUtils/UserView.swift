@@ -108,21 +108,9 @@ struct UserView: View {
                             .bold()
                         
                         // Public Key Display
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Public Key")
-                                .font(.subheadline)
-                                .foregroundColor(.gray)
-                            
-                            HStack {
-                                Image(systemName: "key.fill")
-                                    .foregroundColor(.blue)
-                                Text(publicKey)
-                                    .font(.system(.body, design: .monospaced))
-                            }
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(10)
-                        }
+                        VerifyInfoRow(icon: "key.fill",
+                                      title: "Public Key",
+                                      value: publicKey)
                     }
                     .padding(.bottom)
                     
