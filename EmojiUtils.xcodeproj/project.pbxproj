@@ -14,8 +14,6 @@
 		E3259F052D1B42FC0072D362 /* ProofTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3259F042D1B42FC0072D362 /* ProofTimerView.swift */; };
 		E332D5582D15E3F500BE4C5E /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E332D5572D15E3F500BE4C5E /* UserView.swift */; };
 		E347B89A2D180A4A00017227 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E347B8992D180A4A00017227 /* AuthManager.swift */; };
-		E37CB5BB2D1B3D8D00F71E49 /* HTTPTypes in Frameworks */ = {isa = PBXBuildFile; productRef = E37CB5BA2D1B3D8D00F71E49 /* HTTPTypes */; };
-		E37CB5BD2D1B3D8D00F71E49 /* HTTPTypesFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = E37CB5BC2D1B3D8D00F71E49 /* HTTPTypesFoundation */; };
 		E37CB5BF2D1B41D900F71E49 /* VerifyEmojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37CB5BE2D1B41D900F71E49 /* VerifyEmojiView.swift */; };
 		E3B5ECBC2D11CECF00428BEF /* EmojiUtilsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECBB2D11CECF00428BEF /* EmojiUtilsApp.swift */; };
 		E3B5ECBE2D11CECF00428BEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECBD2D11CECF00428BEF /* ContentView.swift */; };
@@ -24,6 +22,8 @@
 		E3B5ECCC2D11CF6100428BEF /* Hash.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECCB2D11CF6100428BEF /* Hash.swift */; };
 		E3B5ECCE2D11CF7F00428BEF /* Verify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B5ECCD2D11CF7F00428BEF /* Verify.swift */; };
 		E3BADB1D2D1C2CBB002D2890 /* BiometricAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BADB1C2D1C2CBB002D2890 /* BiometricAuthHelper.swift */; };
+		E3CA88F92D216D9C00DB6D1C /* HTTPTypes in Frameworks */ = {isa = PBXBuildFile; productRef = E3CA88F82D216D9C00DB6D1C /* HTTPTypes */; };
+		E3CA88FB2D216D9C00DB6D1C /* HTTPTypesFoundation in Frameworks */ = {isa = PBXBuildFile; productRef = E3CA88FA2D216D9C00DB6D1C /* HTTPTypesFoundation */; };
 		E3F304852D160B4200B620A8 /* rust-api.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3F304842D160B4200B620A8 /* rust-api.swift */; };
 /* End PBXBuildFile section */
 
@@ -54,8 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E37CB5BB2D1B3D8D00F71E49 /* HTTPTypes in Frameworks */,
-				E37CB5BD2D1B3D8D00F71E49 /* HTTPTypesFoundation in Frameworks */,
+				E3CA88F92D216D9C00DB6D1C /* HTTPTypes in Frameworks */,
+				E3CA88FB2D216D9C00DB6D1C /* HTTPTypesFoundation in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,8 +136,8 @@
 			);
 			name = EmojiUtils;
 			packageProductDependencies = (
-				E37CB5BA2D1B3D8D00F71E49 /* HTTPTypes */,
-				E37CB5BC2D1B3D8D00F71E49 /* HTTPTypesFoundation */,
+				E3CA88F82D216D9C00DB6D1C /* HTTPTypes */,
+				E3CA88FA2D216D9C00DB6D1C /* HTTPTypesFoundation */,
 			);
 			productName = EmojiUtils;
 			productReference = E3B5ECB82D11CECF00428BEF /* EmojiUtils.app */;
@@ -361,7 +361,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = gh.nichokas.EmojiUtils;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -401,7 +401,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = gh.nichokas.EmojiUtils;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -450,12 +450,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E37CB5BA2D1B3D8D00F71E49 /* HTTPTypes */ = {
+		E3CA88F82D216D9C00DB6D1C /* HTTPTypes */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E31A09952D16C57E00B8CB32 /* XCRemoteSwiftPackageReference "swift-http-types" */;
 			productName = HTTPTypes;
 		};
-		E37CB5BC2D1B3D8D00F71E49 /* HTTPTypesFoundation */ = {
+		E3CA88FA2D216D9C00DB6D1C /* HTTPTypesFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E31A09952D16C57E00B8CB32 /* XCRemoteSwiftPackageReference "swift-http-types" */;
 			productName = HTTPTypesFoundation;
