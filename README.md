@@ -7,7 +7,7 @@ EmojiUtils is a fun and visual application that enhances the way we work with ha
 ## Features  
 
 - 🌟 **Visual Hashing**: Generate hashes represented as emoji sequences for a unique and colorful experience.  
-- 🛡️ **Identity Verification**: Prove your identity using emoji-based codes in the Identities Tab.  
+🛡️ Identity Verification: Prove your identity using emoji-based codes in the Identities Tab. These codes only last 5 minutes.
 - 🚀 **User-friendly Interface**: Built with SwiftUI for a sleek and responsive user experience.  
 
 ---
